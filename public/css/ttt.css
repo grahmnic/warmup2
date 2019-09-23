@@ -1,0 +1,22 @@
+@media only screen and (max-width: 800px) {
+    .link {
+        display: none;
+    }
+
+    .link:hover {
+        color: white !important;
+    }
+}
+
+.ct {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    width: 50%;
+}
+
+html, body {
+
+}
