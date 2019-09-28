@@ -10,6 +10,32 @@ app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+//SAMPLE
+app.get('/menusection/:id', (req, res) => {
+    const id = parseInt(req.params.id);
+    db.getMenuSectionById(id, (err, result) => {
+        if (err) {
+            console.log("err");
+            console.log(err);
+            res.status(400).send({
+                success: false
+            });
+        }
+        if (result != undefined && result.length != 0) {
+            res.status(200).send({
+                MenuSection: result
+            });
+        }
+        else {
+            res.status(404).send({
+                success: false,
+                message: 'id not found'
+            });
+        }
+    });
+
+});
+
 app.get('/ttt', function (req, res) {
    console.log("GET");
    res.sendFile( __dirname + "/" + "index.html" );
