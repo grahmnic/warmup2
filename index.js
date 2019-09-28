@@ -13,7 +13,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 //SAMPLE
 app.get('/menusection/:id', (req, res) => {
     const id = parseInt(req.params.id);
-    db.getMenuSectionById(id, (err, result) => {
+    db.addUser(username, password, email, (err, result) => {
         if (err) {
             console.log("err");
             console.log(err);
@@ -37,14 +37,14 @@ app.get('/menusection/:id', (req, res) => {
 });
 
 app.get('/ttt', function (req, res) {
-   console.log("GET");
-   res.sendFile( __dirname + "/" + "index.html" );
+    console.log("GET");
+    res.sendFile(__dirname + "/" + "index.html");
 })
 
 app.post('/ttt', urlencodedParser, function (req, res) {
     console.log("POST FORM");
     response = {
-       name:req.body.name
+        name: req.body.name
     };
     var fileContent = fs.readFileSync(__dirname + "/" + "grid.html", 'utf8');
     var today = new Date();
@@ -56,14 +56,14 @@ app.post('/ttt', urlencodedParser, function (req, res) {
     fileContent = fileContent.replace("<h2 id='name'>Test</h2>", "<h2 id='name'>Welcome " + response.name + " " + today + "!</h2>")
     res.write(fileContent);
     res.end();
- })
+})
 
- app.post('/ttt/play', function(req, res) {
+app.post('/ttt/play', function (req, res) {
     console.log("POST PLAY");
     var grid = req.body.grid;
     var winner = null;
 
-    if('X' == grid[0] && 'X' == grid[1] && 'X' == grid[2]) {
+    if ('X' == grid[0] && 'X' == grid[1] && 'X' == grid[2]) {
         winner = true;
     } else if ('X' == grid[3] && 'X' == grid[4] && 'X' == grid[5]) {
         winner = true;
@@ -81,9 +81,9 @@ app.post('/ttt', urlencodedParser, function (req, res) {
         winner = true;
     } else {
         // DO RANDOM MOVE
-        grid[Math.floor(Math.random()*grid.length)] = 'O';
+        grid[Math.floor(Math.random() * grid.length)] = 'O';
 
-        if('O' == grid[0] && 'O' == grid[1] && 'O' == grid[2]) {
+        if ('O' == grid[0] && 'O' == grid[1] && 'O' == grid[2]) {
             winner = false;
         } else if ('O' == grid[3] && 'O' == grid[4] && 'O' == grid[5]) {
             winner = false;
@@ -105,13 +105,13 @@ app.post('/ttt', urlencodedParser, function (req, res) {
         grid: grid,
         winner: winner
     }
-console.log("POST RESP");
+    console.log("POST RESP");
     res.send(response);
- })
+})
 
 var server = app.listen(80, function () {
-   var host = server.address().address
-   var port = server.address().port
-   
-   console.log("Example app listening at http://%s:%s", host, port)
+    var host = server.address().address
+    var port = server.address().port
+
+    console.log("Example app listening at http://%s:%s", host, port)
 })
