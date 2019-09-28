@@ -17,7 +17,7 @@
 <body>
     <div class="ct">
         <div class="container">
-            <div class="notification" style="max-width: 670px">
+            <div class="notification" style="max-width: 600px">
                 <h2 style="border-bottom: 1px dotted grey; margin-bottom: 10px">
                     <strong>Start A New Game</strong>
                 </h2>
@@ -32,6 +32,49 @@
                     <button type="submit" class="button is-primary">Submit</button>
                 </form>
             </div>
+
+            <div class="notification" style="max-width: 600px">
+                <form action="/ttt/" method="POST">
+                    <h2 style="border-bottom: 1px dotted grey; margin-bottom: 10px">
+                        <strong>Sign Up</strong>
+                    </h2>
+                    <div class="field">
+                        <span style="font-size: 13px;">Username</span>
+                        <p class="control">
+                            <input name="username" class="input is-small" type="text" placeholder="Username">
+                        </p>
+                        <span style="font-size: 13px;">Password</span>
+                        <p class="control">
+                            <input name="password" class="input is-small" type="text" placeholder="Password">
+                        </p>
+                        <span style="font-size: 13px;">Email</span>
+                        <p class="control">
+                            <input name="email" class="input is-small" type="text" placeholder="Email">
+                        </p>
+                    </div>
+                    <button type="submit" class="button is-primary">Submit</button>
+                </form>
+            </div>
+            
+            <div class="notification" style="max-width: 600px">
+                <form action="/ttt/" method="POST">
+                    <h2 style="border-bottom: 1px dotted grey; margin-bottom: 10px">
+                        <strong>Login</strong>
+                    </h2>
+                    <div class="field">
+                        <span style="font-size: 13px;">Username</span>
+                        <p class="control">
+                            <input name="username" class="input is-small" type="text" placeholder="Username">
+                        </p>
+                        <span style="font-size: 13px;">Password</span>
+                        <p class="control">
+                            <input name="password" class="input is-small" type="text" placeholder="Password">
+                        </p>
+                    </div>
+                    <button type="submit" class="button is-primary">Submit</button>
+                </form>
+            </div>
+
         </div>
         <br/>
     </div>
