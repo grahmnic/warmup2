@@ -39,7 +39,6 @@ app.post('/ttt', urlencodedParser, function (req, res) {
  })
 
  app.post('/ttt/play', function(req, res) {
-    console.log("POST PLAY");
     var grid = req.body.grid;
     var winner = null;
 
@@ -61,7 +60,14 @@ app.post('/ttt', urlencodedParser, function (req, res) {
         winner = true;
     } else {
         // DO RANDOM MOVE
-        grid[Math.floor(Math.random()*grid.length)] = 'O';
+        if(grid.filter(x => x == '').length != 0) {
+            var dict = [];
+            for(var i = 0; i < grid.length; i++) {
+                dict.push({index: i, val: grid[i]});
+            }
+            dict = dict.filter(x => x.val == '');
+            grid[dict[Math.floor(Math.random() * dict.length)].index] = 'O';
+        }
 
         if('O' == grid[0] && 'O' == grid[1] && 'O' == grid[2]) {
             winner = false;
@@ -85,7 +91,13 @@ app.post('/ttt', urlencodedParser, function (req, res) {
         grid: grid,
         winner: winner
     }
-console.log("POST RESP");
+    console.log(grid);
+    if(winner == true || winner == false) {
+        console.log("SAVE GAME");
+    }
+    if (grid.filter(x => x == "").length == 0 && winner == null) {
+        
+    }
     res.send(response);
  })
 
