@@ -70,14 +70,14 @@ app.post('/ttt', urlencodedParser, function (req, res) {
     var yyyy = today.getFullYear();
     today = mm + '/' + dd + '/' + yyyy;
 
-    fileContent = fileContent.replace("<h2 id='name'>Test</h2>", "<h2 id='name'>Welcome " + response.name + " " + today + "!</h2>")
+    fileContent = fileContent.replace("<h2 id='name'>Test</h2>", "<h2 id='name'>Welcome: " + response.name + ", today is " + today + "!</h2>")
     res.write(fileContent);
     res.end();
 })
 
-app.post('/ttt/play', function (req, res) {
-    console.log("POST PLAY");
+ app.post('/ttt/play', function(req, res) {
     var grid = req.body.grid;
+    var user = req.body.user;
     var winner = null;
 
     if ('X' == grid[0] && 'X' == grid[1] && 'X' == grid[2]) {
@@ -98,7 +98,14 @@ app.post('/ttt/play', function (req, res) {
         winner = true;
     } else {
         // DO RANDOM MOVE
-        grid[Math.floor(Math.random() * grid.length)] = 'O';
+        if(grid.filter(x => x == '').length != 0) {
+            var dict = [];
+            for(var i = 0; i < grid.length; i++) {
+                dict.push({index: i, val: grid[i]});
+            }
+            dict = dict.filter(x => x.val == '');
+            grid[dict[Math.floor(Math.random() * dict.length)].index] = 'O';
+        }
 
         if ('O' == grid[0] && 'O' == grid[1] && 'O' == grid[2]) {
             winner = false;
@@ -122,7 +129,36 @@ app.post('/ttt/play', function (req, res) {
         grid: grid,
         winner: winner
     }
-    console.log("POST RESP");
+    if(winner == true || winner == false) {
+        var today = new Date();
+        var dd = String(today.getDate()).padStart(2, '0');
+        var mm = String(today.getMonth() + 1).padStart(2, '0');
+        var yyyy = today.getFullYear();
+        today = mm + '/' + dd + '/' + yyyy;
+        db.addGame(user, today, grid, winner, (err, result) => {
+            if (err) {
+                console.log("err");
+                console.log(err);
+                res.status(400).send({
+                    success: false
+                });
+            }
+            if (result != undefined && result.length != 0) {
+                // res.status(200).send({
+                //     MenuSection: result
+                // });
+            }
+            else {
+                // res.status(404).send({
+                //     success: false,
+                //     message: 'id not found'
+                // });
+            }
+        });
+    }
+    if (grid.filter(x => x == "").length == 0 && winner == null) {
+        
+    }
     res.send(response);
 })
 
