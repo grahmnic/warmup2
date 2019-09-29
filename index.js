@@ -210,6 +210,7 @@ app.post('/ttt', urlencodedParser, function (req, res) {
             grid[req.body.move] = 'X';
         } else {
             grid = req.session.grid;
+            grid[req.body.move] = 'X';
             // db.getGrid((err, result) => {
             //     if(err) {
             //         res.status(200).send({
