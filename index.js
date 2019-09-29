@@ -34,6 +34,7 @@ app.post('/ttt', urlencodedParser, function (req, res) {
 })
 
  app.post('/ttt/adduser', urlencodedParser, function(req, res) {
+    console.log("TEST");
     var username = req.body.username;
     var password = req.body.password;
     var email = req.body.email;
