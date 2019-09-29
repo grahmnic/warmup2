@@ -141,11 +141,12 @@ module.exports = {
         });
     },
     getGrid: function(game_id, callback) {
-        const getGridQuery = 'SELECT grid FROM Games WHERE game_id=?';
+        const getGridQuery = 'SELECT grid FROM Games WHERE game_id=10';
         db.get(getGridQuery, [game_id], (err, res) => {
             if(err) {
                 callback(err);
             } else {
+                console.log(res);
                 var arr = res.grid.split(",");
                 for(var i = 0; i < arr.length; i++) {
                     if(arr[i] == null) {

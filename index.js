@@ -211,16 +211,21 @@ app.post('/ttt', urlencodedParser, function (req, res) {
     var user = req.session.username;
     var winner = null;
     if(req.body.move) {
-        db.getGrid((err, result) => {
-            if(err) {
-                res.status(200).send({
-                    status: "ERROR"
-                })
-            } else {
-                grid = result;
-                grid[move] = 'X';
-            }
-        });
+        if(req.session.game_id == undefined) {
+            grid = ['','','','','','','','',''];
+            grid[req.body.move] = 'X';
+        } else {
+            db.getGrid((err, result) => {
+                if(err) {
+                    res.status(200).send({
+                        status: "ERROR"
+                    })
+                } else {
+                    grid = result;
+                    grid[req.body.move] = 'X';
+                }
+            });
+        }
     }
     
     if ('X' == grid[0] && 'X' == grid[1] && 'X' == grid[2]) {
