@@ -141,7 +141,7 @@ module.exports = {
         });
     },
     getGrid: function(game_id, callback) {
-        const getGridQuery = 'SELECT grid FROM Games WHERE game_id=10';
+        const getGridQuery = 'SELECT grid FROM Games WHERE game_id=?';
         db.get(getGridQuery, [game_id], (err, res) => {
             if(err) {
                 callback(err);
