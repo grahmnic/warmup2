@@ -10,12 +10,9 @@
   "dependencies": {
     "body-parser": "^1.19.0",
     "express": "^4.17.1",
-<<<<<<< HEAD
-    "nodemailer": "^6.3.0"
-=======
     "nodemailer": "^6.3.0",
+    "express-session": "^1.16.2",
     "sqlite3": "^4.1.0"
->>>>>>> fd6ccd8a289756499f32543342977ca3a59ca984
   },
   "devDependencies": {},
   "description": ""

@@ -18,28 +18,19 @@ module.exports = {
                 callback(err);
             }
             else {
-                console.log(rows);
                 callback(null, rows);
             }
         });
     },
     verify: function (email, key, callback) {
-        const getKeyQuery = 'SELECT key FROM User WHERE email=?';
-        db.get(getKeyQuery, [email], (err, row) => {
+        console.log(email + key);
+        const getKeyQuery = 'UPDATE User SET verified=1 WHERE email=? AND key=?';
+        db.run(getKeyQuery, [email, key], (err, row) => {
             if (err) {
-                callback(err);
+                callback(null, 0);
             }
             else {
-                console.log(row);
-                if (key === 'abracadabra') {
-                    callback(null, 1);
-                }
-                if (key === row.key) {
-                    callback(null, 1);
-                }
-                else {
-                    callback(null, 0);
-                }
+                callback(null, 1);
             }
         });
     },
@@ -74,9 +65,9 @@ module.exports = {
             }
         });
     },
-    getGamesByUsername: function (username, callback) {
-        const getGamesQuery = 'SELECT * FROM Games WHERE username = ?';
-        db.all(getGamesQuery, [username], (err, rows) => {
+    getGamesById: function (id, callback) {
+        const getGamesQuery = 'SELECT * FROM Games WHERE game_id = ?';
+        db.all(getGamesQuery, [id], (err, rows) => {
             if (err) {
                 callback(err);
             } else {
@@ -98,28 +89,19 @@ module.exports = {
 
         });
     },
-    addGameByUsername: function (username, date, callback) {
-        const getUserQuery = 'INSERT INTO Games(username,start_date,grid) VALUES(?,?,?)';
-        db.run(getUserQuery, [username,date, '         '], (err, row) => {
+    addGame: function (username, date, grid, winner, callback) {
+        var grid_str = grid.join();
+        const getUserQuery = 'INSERT INTO Games(username,start_date,grid,winner) VALUES(?,?,?,?)';
+        db.run(getUserQuery, [username,date,grid_str,winner], (err, row) => {
             if (err) {
                 callback(err);
             } else {
                 console.log(row);
                 callback(null, row);
             }
-
         });
     },
-    updateGameByID: function (id, grid, callback) {
-        const getUserQuery = 'UPDATE Games WHERE game_id =? SET grid = ?';
-        db.run(getUserQuery, [id,grid], (err, row) => {
-            if (err) {
-                callback(err);
-            } else {
-                console.log(row);
-                callback(null, row);
-            }
-
-        });
+    getScore: function(callback) {
+        const getScoreQuery = ''
     }
 };

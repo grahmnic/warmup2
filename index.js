@@ -1,12 +1,19 @@
 var express = require('express');
 var fs = require("fs");
 var app = express();
+var session = require('express-session');
 var bodyParser = require('body-parser');
 const sqlite3 = require('sqlite3').verbose();
+var path = require('path');
 var urlencodedParser = bodyParser.urlencoded({ extended: true })
 const db = require('./db.js');
 const nodemailer = require('nodemailer');
 
+app.use(session({
+	secret: 'secret',
+	resave: true,
+	saveUninitialized: true
+}));
 app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -14,6 +21,12 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.get('/ttt', function (req, res) {
     console.log("GET");
     res.sendFile(__dirname + "/" + "index.html");
+    if (req.session.loggedin) {
+        console.log('Logged in');
+        res.sendFile(__dirname + "/" + "logout.html");
+    } else {
+        console.log('Please login.');
+    }
 })
 
 app.post('/ttt', urlencodedParser, function (req, res) {
@@ -58,7 +71,7 @@ app.post('/ttt', urlencodedParser, function (req, res) {
             
             let mailOptions = {
                 from: 'cloud356ttt@gmail.com',
-                to: 'chinkylsx@gmail.com',
+                to: email,
                 subject: 'Verify your email.',
                 text: 'validation key: ' + '<' + key + '>',
             };
@@ -104,22 +117,76 @@ app.post('/ttt', urlencodedParser, function (req, res) {
      var username = req.body.username;
      var password = req.body.password;
 
+     db.login(username, password, (err, result) => {
+        if (err) {
+            console.log("Error: " + err);
+            res.status(400).send({
+                success: false
+            });
+        }
+        else if (result == 1) {   
+            req.session.loggedin = true;
+            req.session.username = username;
+            res.status(200).send({
+                status: "OK"
+            });   
+        }
+        else {
+            res.status(200).send({
+                status: "ERROR"
+            })
+        }
+     });
  })
 
  app.post('/logout', function(req, res) {
-
+    
  })
 
  app.post('/listgames', function(req, res) {
-
+    db.getAllGames((err, result) => {
+        if (err) {
+            res.status(200).send({
+                status: "ERROR"
+            })
+        } else {
+            res.status(200).send({
+                status: "OK",
+                games: result
+            })
+        }
+    })
  })
 
  app.post('/getgame', function(req, res) {
-
+    var id = req.body.id;
+    db.getGamesById(id, (err, result) => {
+        if(err) {
+            res.status(200).send({
+                status: "ERROR"
+            })
+        } else {
+            res.status(200).send({
+                status: "OK",
+                grid: result
+            })
+        }
+    })
  }) 
 
  app.post('/getscore', function(req, res) {
-
+    db.getScore((err, result) => {
+        if(err) {
+            res.status(200).send({
+                status: "ERROR"
+            })
+        } else {
+            res.status(200).send({
+                status: "OK",
+                human: result
+            })
+        }
+    })
  });
 
  app.post('/ttt/play', function(req, res) {
@@ -176,7 +243,7 @@ app.post('/ttt', urlencodedParser, function (req, res) {
         grid: grid,
         winner: winner
     }
-    if(winner == true || winner == false) {
+    if(winner == true || winner == false || (grid.filter(x => x == "").length == 0 && winner == null)) {
         var today = new Date();
         var dd = String(today.getDate()).padStart(2, '0');
         var mm = String(today.getMonth() + 1).padStart(2, '0');
@@ -184,27 +251,12 @@ app.post('/ttt', urlencodedParser, function (req, res) {
         today = mm + '/' + dd + '/' + yyyy;
         db.addGame(user, today, grid, winner, (err, result) => {
             if (err) {
-                console.log("err");
                 console.log(err);
                 res.status(400).send({
                     success: false
                 });
             }
-            if (result != undefined && result.length != 0) {
-                // res.status(200).send({
-                //     MenuSection: result
-                // });
-            }
-            else {
-                // res.status(404).send({
-                //     success: false,
-                //     message: 'id not found'
-                // });
-            }
         });
-    }
-    if (grid.filter(x => x == "").length == 0 && winner == null) {
-        
     }
     res.send(response);
 })
