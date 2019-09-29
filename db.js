@@ -41,11 +41,13 @@ module.exports = {
                 callback(null, 0);//username not found
             }
             else {
-                console.log(row);
+                console.log('0');
                 if (password === row.password) {
+                    console.log('1');
                     callback(null, 1);
                 }
                 else {
+                    console.log('2');
                     callback(null, 0);
                 }
             }
