@@ -11,57 +11,6 @@ app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-let transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-        user: 'cloud356ttt@gmail.com',
-        pass: 'cse356-cloud',
-    }
-});
-
-let mailOptions = {
-    from: 'cloud356ttt@gmail.com',
-    to: 'ralph.huang@stonybrook.edu',
-    subject: 'Verify your email.',
-    text: 'validation key: '
-};
-
-transporter.sendMail(mailOptions)
-    .then(function(response) {
-        console.log('Email sent');
-    }).catch(function(error) {
-        console.log('Error ', error);
-    });
-
-//SIGN UP
-app.post('/signup', (req, res) => {
-    var username = req.body.username;
-    var password = req.body.password;
-    var email = req.body.email;
-
-    db.addUser(username, password, email, (err, result) => {
-        if (err) {
-            console.log("err");
-            console.log(err);
-            res.status(400).send({
-                success: false
-            });
-        }
-        if (result != undefined && result.length != 0) {
-            res.status(200).send({
-                MenuSection: result
-            });
-        }
-        else {
-            res.status(404).send({
-                success: false,
-                message: 'id not found'
-            });
-        }
-    });
-
-});
-
 app.get('/ttt', function (req, res) {
     console.log("GET");
     res.sendFile(__dirname + "/" + "index.html");
@@ -84,26 +33,44 @@ app.post('/ttt', urlencodedParser, function (req, res) {
     res.end();
 })
 
- app.post('/ttt/adduser', function(req, res) {
+ app.post('/ttt/adduser', urlencodedParser, function(req, res) {
     var username = req.body.username;
     var password = req.body.password;
     var email = req.body.email;
+    var key = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
 
-    db.addUser(username, password, email, (err, result) => {
+    db.addUser(username, password, email, key, (err, result) => {
         if (err) {
+            console.log("Error: " + err);
             res.status(400).send({
                 success: false
             });
         }
-        if (result != undefined && result.length != 0) {
-            res.status(200).send({
-                MenuSection: result
-            });
-        }
         else {
-            res.status(404).send({
-                success: false,
-                message: ''
+            //SEND EMAIL
+            let transporter = nodemailer.createTransport({
+                service: 'gmail',
+                auth: {
+                    user: 'cloud356ttt@gmail.com',
+                    pass: 'cse356-cloud',
+                }
+            });
+            
+            let mailOptions = {
+                from: 'cloud356ttt@gmail.com',
+                to: 'chinkylsx@gmail.com',
+                subject: 'Verify your email.',
+                text: 'validation key: ' + key,
+            };
+            
+            transporter.sendMail(mailOptions)
+                .then(function(response) {
+                    console.log('Email sent');
+                }).catch(function(error) {
+                    console.log('Error ', error);
+                });
+            res.status(200).send({
+                status: "OK"
             });
         }
     });
@@ -113,6 +80,45 @@ app.post('/ttt', urlencodedParser, function (req, res) {
     var email = req.body.email;
     var key = req.body.key;
 
+    db.verify(email, key, (err, result) => {
+        if (err) {
+            console.log("Error: " + err);
+            res.status(400).send({
+                success: false
+            });
+        }
+        else if (result == 1) {
+            res.status(200).send({
+                status: "OK"
+            });
+        }
+        else {
+            res.status(200).send({
+                status: "ERROR"
+            })
+        }
+    });
+ })
+
+ app.post('/ttt/login', function(req, res) {
+     var username = req.body.username;
+     var password = req.body.password;
+
+ })
+
+ app.post('/ttt/logout', function(req, res) {
+
+ })
+
+ app.post('/ttt/listgames', function(req, res) {
+
+ })
+
+ app.post('/ttt/getgame', function(req, res) {
+
+ }) 
+
+ app.post('/ttt/getscore', function(req, res) {
 
  });
 
