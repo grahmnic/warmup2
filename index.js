@@ -5,14 +5,31 @@ var bodyParser = require('body-parser');
 const sqlite3 = require('sqlite3').verbose();
 var urlencodedParser = bodyParser.urlencoded({ extended: true })
 const db = require('./db.js');
+const nodemailer = require('nodemailer');
 
 app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-//SAMPLE
+//SIGN UP
 app.post('/signup', (req, res) => {
-    const id = parseInt(req.params.id);
+    var username = req.body.username;
+    var password = req.body.password;
+    var email = req.body.email;
+
+    let transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+            user: '',
+            password: ''
+        }
+    });
+
+    let mailOptions = {
+        from: 'cloud356ttt@gmail.com',
+        to: email,
+    };
+
     db.addUser(username, password, email, (err, result) => {
         if (err) {
             console.log("err");
