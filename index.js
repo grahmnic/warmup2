@@ -29,6 +29,10 @@ app.get('/ttt', function (req, res) {
     }
 })
 
+app.get('/logout', function (req, res) {
+    res.sendFile(__dirname + "/" + "logout.html");
+})
+
 app.post('/ttt', urlencodedParser, function (req, res) {
     console.log("POST FORM");
     response = {
@@ -129,9 +133,10 @@ app.post('/ttt', urlencodedParser, function (req, res) {
             req.session.username = username;
             res.status(200).send({
                 status: "OK"
-            });   
+            });    
         }
         else {
+            console.log("e");
             res.status(200).send({
                 status: "ERROR"
             })
