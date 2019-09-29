@@ -13,7 +13,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 //SAMPLE
 app.get('/menusection/:id', (req, res) => {
     const id = parseInt(req.params.id);
-    db.getMenuSectionById(id, (err, result) => {
+    db.addUser(username, password, email, (err, result) => {
         if (err) {
             console.log("err");
             console.log(err);
@@ -37,14 +37,14 @@ app.get('/menusection/:id', (req, res) => {
 });
 
 app.get('/ttt', function (req, res) {
-   console.log("GET");
-   res.sendFile( __dirname + "/" + "index.html" );
+    console.log("GET");
+    res.sendFile(__dirname + "/" + "index.html");
 })
 
 app.post('/ttt', urlencodedParser, function (req, res) {
     console.log("POST FORM");
     response = {
-       name:req.body.name
+        name: req.body.name
     };
     var fileContent = fs.readFileSync(__dirname + "/" + "grid.html", 'utf8');
     var today = new Date();
@@ -53,16 +53,17 @@ app.post('/ttt', urlencodedParser, function (req, res) {
     var yyyy = today.getFullYear();
     today = mm + '/' + dd + '/' + yyyy;
 
-    fileContent = fileContent.replace("<h2 id='name'>Test</h2>", "<h2 id='name'>Welcome " + response.name + " " + today + "!</h2>")
+    fileContent = fileContent.replace("<h2 id='name'>Test</h2>", "<h2 id='name'>Welcome: " + response.name + ", today is " + today + "!</h2>")
     res.write(fileContent);
     res.end();
- })
+})
 
  app.post('/ttt/play', function(req, res) {
     var grid = req.body.grid;
+    var user = req.body.user;
     var winner = null;
 
-    if('X' == grid[0] && 'X' == grid[1] && 'X' == grid[2]) {
+    if ('X' == grid[0] && 'X' == grid[1] && 'X' == grid[2]) {
         winner = true;
     } else if ('X' == grid[3] && 'X' == grid[4] && 'X' == grid[5]) {
         winner = true;
@@ -89,7 +90,7 @@ app.post('/ttt', urlencodedParser, function (req, res) {
             grid[dict[Math.floor(Math.random() * dict.length)].index] = 'O';
         }
 
-        if('O' == grid[0] && 'O' == grid[1] && 'O' == grid[2]) {
+        if ('O' == grid[0] && 'O' == grid[1] && 'O' == grid[2]) {
             winner = false;
         } else if ('O' == grid[3] && 'O' == grid[4] && 'O' == grid[5]) {
             winner = false;
@@ -111,19 +112,42 @@ app.post('/ttt', urlencodedParser, function (req, res) {
         grid: grid,
         winner: winner
     }
-    console.log(grid);
     if(winner == true || winner == false) {
-        console.log("SAVE GAME");
+        var today = new Date();
+        var dd = String(today.getDate()).padStart(2, '0');
+        var mm = String(today.getMonth() + 1).padStart(2, '0');
+        var yyyy = today.getFullYear();
+        today = mm + '/' + dd + '/' + yyyy;
+        db.addGame(user, today, grid, winner, (err, result) => {
+            if (err) {
+                console.log("err");
+                console.log(err);
+                res.status(400).send({
+                    success: false
+                });
+            }
+            if (result != undefined && result.length != 0) {
+                // res.status(200).send({
+                //     MenuSection: result
+                // });
+            }
+            else {
+                // res.status(404).send({
+                //     success: false,
+                //     message: 'id not found'
+                // });
+            }
+        });
     }
     if (grid.filter(x => x == "").length == 0 && winner == null) {
         
     }
     res.send(response);
- })
+})
 
 var server = app.listen(80, function () {
-   var host = server.address().address
-   var port = server.address().port
-   
-   console.log("Example app listening at http://%s:%s", host, port)
+    var host = server.address().address
+    var port = server.address().port
+
+    console.log("Example app listening at http://%s:%s", host, port)
 })
