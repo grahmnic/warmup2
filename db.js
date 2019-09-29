@@ -27,10 +27,21 @@ module.exports = {
         const getKeyQuery = 'UPDATE User SET verified=1 WHERE email=? AND (key=? OR ?="abracadabra")';
         db.run(getKeyQuery, [email, key, key], (err, row) => {
             if (err) {
+                console.log(err);
                 callback(null, 0);
             }
             else {
-                callback(null, 1);
+                db.get('SELECT verified FROM User WHERE email=?', [email], (err, result) => {
+                    console.log(result);
+                    if(err) {
+                        console.log(err);
+                        callback(null, 0);
+                    } else if (result.verified === 1) {
+                        callback(null, 1);
+                    } else {
+                        callback(null, 0);
+                    }
+                })
             }
         });
     },
