@@ -39,29 +39,6 @@ app.post('/signup', (req, res) => {
     var password = req.body.password;
     var email = req.body.email;
 
-    // let transporter = nodemailer.createTransport({
-    //     service: 'gmail',
-    //     auth: {
-    //         user: 'cloud356ttt@gmail.com',
-    //         password: 'cse356-cloud',
-    //     }
-    // });
-
-    // let mailOptions = {
-    //     from: 'cloud356ttt@gmail.com',
-    //     to: 'ralph.huang@stonybrook.edu',
-    //     subject: 'Verify your email.',
-    //     text: 'validation key: '
-    // };
-
-    // transporter.sendMail(mailOptions, function(err, data) {
-    //     if (err) {
-    //         console.log('Error');
-    //     } else {
-    //         console.log('EMAIL SEND');
-    //     }
-    // });
-
     db.addUser(username, password, email, (err, result) => {
         if (err) {
             console.log("err");
