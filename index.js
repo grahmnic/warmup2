@@ -1,12 +1,18 @@
 var express = require('express');
 var fs = require("fs");
 var app = express();
+var session = require('express-session');
 var bodyParser = require('body-parser');
 const sqlite3 = require('sqlite3').verbose();
 var urlencodedParser = bodyParser.urlencoded({ extended: true })
 const db = require('./db.js');
 const nodemailer = require('nodemailer');
 
+app.use(session({
+	secret: 'secret',
+	resave: true,
+	saveUninitialized: true
+}));
 app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -103,6 +109,28 @@ app.post('/ttt', urlencodedParser, function (req, res) {
  app.post('/login', function(req, res) {
      var username = req.body.username;
      var password = req.body.password;
+
+     db.login(username, password, (err, result) => {
+        if (err) {
+            console.log("Error: " + err);
+            res.status(400).send({
+                success: false
+            });
+        }
+        else if (result == 1) {       
+            req.session.loggedin = true;
+            req.session.username = username;
+            res.redirect('/');
+            res.status(200).send({
+                status: "OK"
+            });
+        }
+        else {
+            res.status(200).send({
+                status: "ERROR"
+            })
+        }
+     });
 
  })
 
