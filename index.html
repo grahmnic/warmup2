@@ -34,7 +34,26 @@
             </div>
 
             <div class="notification" style="max-width: 600px">
-                <form action="/ttt/" method="POST">
+                <form action="/ttt/login" method="POST">
+                    <h2 style="border-bottom: 1px dotted grey; margin-bottom: 10px">
+                        <strong>Login</strong>
+                    </h2>
+                    <div class="field">
+                        <span style="font-size: 13px;">Username</span>
+                        <p class="control">
+                            <input name="username" class="input is-small" type="text" placeholder="Username">
+                        </p>
+                        <span style="font-size: 13px;">Password</span>
+                        <p class="control">
+                            <input name="password" class="input is-small" type="text" placeholder="Password">
+                        </p>
+                    </div>
+                    <button type="submit" class="button is-primary">Submit</button>
+                </form>
+            </div>
+
+            <div class="notification" style="max-width: 600px">
+                <form action="/ttt/adduser" method="POST">
                     <h2 style="border-bottom: 1px dotted grey; margin-bottom: 10px">
                         <strong>Sign Up</strong>
                     </h2>
@@ -55,20 +74,21 @@
                     <button type="submit" class="button is-primary">Submit</button>
                 </form>
             </div>
-            
+
             <div class="notification" style="max-width: 600px">
-                <form action="/ttt/" method="POST">
-                    <h2 style="border-bottom: 1px dotted grey; margin-bottom: 10px">
-                        <strong>Login</strong>
-                    </h2>
+                <h2 style="border-bottom: 1px dotted grey; margin-bottom: 10px">
+                    <strong>Verify</strong>
+                </h2>
+
+                <form action="/ttt/verify" method="POST">
                     <div class="field">
-                        <span style="font-size: 13px;">Username</span>
+                        <span style="font-size: 13px;">Email</span>
                         <p class="control">
-                            <input name="username" class="input is-small" type="text" placeholder="Username">
+                            <input name="email" class="input is-small" type="text" placeholder="Email">
                         </p>
-                        <span style="font-size: 13px;">Password</span>
+                        <span style="font-size: 13px;">Key</span>
                         <p class="control">
-                            <input name="password" class="input is-small" type="text" placeholder="Password">
+                            <input name="key" class="input is-small" type="text" placeholder="Key">
                         </p>
                     </div>
                     <button type="submit" class="button is-primary">Submit</button>
