@@ -226,6 +226,10 @@ app.post('/ttt', urlencodedParser, function (req, res) {
                 }
             });
         }
+    } else if (req.body.move == null) {
+        res.status(200).send({
+            status: "ERROR"
+        })
     }
     
     if ('X' == grid[0] && 'X' == grid[1] && 'X' == grid[2]) {
