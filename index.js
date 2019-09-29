@@ -310,12 +310,12 @@ app.post('/ttt', urlencodedParser, function (req, res) {
             } else {
                 if(winner === true || winner === false || grid.filter(x => x === " ").length == 0) {
                     // RESET GAME
-                    console.log(winner);
                     console.log("RESETTING GAME");
                     req.session.game_id = undefined
                     req.session.grid = null;
                     req.session.winner = null;
                 }
+                console.log(response);
                 res.send(response);
             }
         })
