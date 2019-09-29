@@ -58,7 +58,6 @@ module.exports = {
                     callback(null, 1);
                 }
                 else {
-                    console.log('2');
                     callback(null, 0);
                 }
             }
