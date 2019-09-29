@@ -200,6 +200,7 @@ app.post('/ttt', urlencodedParser, function (req, res) {
 
  app.post('/ttt/play', function(req, res) {
     console.log(req.body.move);
+    console.log(req.session.id);
     var grid = req.body.grid;
     var user = req.session.username;
     var winner = null;
