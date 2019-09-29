@@ -210,6 +210,7 @@ app.post('/ttt', urlencodedParser, function (req, res) {
     var grid = req.body.grid;
     var user = req.body.name;
     var winner = null;
+    console.log(req.body);
 
     if ('X' == grid[0] && 'X' == grid[1] && 'X' == grid[2]) {
         winner = true;
