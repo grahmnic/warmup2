@@ -60,7 +60,7 @@ app.post('/ttt', urlencodedParser, function (req, res) {
                 from: 'cloud356ttt@gmail.com',
                 to: 'chinkylsx@gmail.com',
                 subject: 'Verify your email.',
-                text: 'validation key: ' + key,
+                text: 'validation key: ' + '<' + key + '>',
             };
             
             transporter.sendMail(mailOptions)
