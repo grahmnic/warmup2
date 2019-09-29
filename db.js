@@ -63,9 +63,9 @@ module.exports = {
             }
         });
     },
-    getAllGames: function (callback) {
-        const getGamesQuery = 'SELECT * FROM Games';
-        db.all(getGamesQuery, [], (err, rows) => {
+    getAllGames: function (username, callback) {
+        const getGamesQuery = 'SELECT * FROM Games WHERE username=?';
+        db.all(getGamesQuery, [username], (err, rows) => {
             if (err) {
                 callback(err);
             }
