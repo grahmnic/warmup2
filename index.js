@@ -186,7 +186,7 @@ app.post('/ttt', urlencodedParser, function (req, res) {
 
  app.post('/ttt/play', function(req, res) {
     var grid = req.body.grid;
-    var user = req.body.user;
+    var user = req.body.name;
     var winner = null;
 
     if ('X' == grid[0] && 'X' == grid[1] && 'X' == grid[2]) {
@@ -250,10 +250,13 @@ app.post('/ttt', urlencodedParser, function (req, res) {
                 res.status(400).send({
                     success: false
                 });
+            } else {
+                res.send(response);
             }
         });
+    } else {
+        res.send(response);
     }
-    res.send(response);
 })
 
 
