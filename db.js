@@ -70,7 +70,9 @@ module.exports = {
                 callback(err);
             }
             else {
-                var arr = []
+                console.log(username);
+                console.log(rows);
+                var arr = [];
                 for(var i = 0; i < rows.length; i++) {
                     arr.push({id: rows[i].game_id, start_date: rows[i].start_date});
                 }
@@ -116,8 +118,41 @@ module.exports = {
             if (err) {
                 callback(err);
             } else {
-                console.log(row);
-                callback(null, row);
+                db.get('SELECT max(game_id) AS id FROM Games', [], (err, result) => {
+                    if(err) {
+                        console.log(err);
+                        callback(null, 0);
+                    } else {
+                        callback(null, result);
+                    }
+                })
+            }
+        });
+    },
+    updateGame: function(game_id, grid, winner, callback) {
+        var grid_str = grid.join();
+        const updateGridQuery = 'UPDATE Games SET grid=?, winner=? WHERE game_id=?';
+        db.run(updateGridQuery, [grid_str, winner, game_id], (err, result) => {
+            if(err) {
+                callback(err);
+            } else {
+                callback(null, 1);
+            }
+        });
+    },
+    getGrid: function(game_id, callback) {
+        const getGridQuery = 'SELECT grid FROM Games WHERE game_id=?';
+        db.get(getGridQuery, [game_id], (err, res) => {
+            if(err) {
+                callback(err);
+            } else {
+                var arr = res.grid.split(",");
+                for(var i = 0; i < arr.length; i++) {
+                    if(arr[i] == null) {
+                        arr[i] = "";
+                    }
+                }
+                callback(null, arr);
             }
         });
     },

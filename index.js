@@ -208,10 +208,21 @@ app.post('/ttt', urlencodedParser, function (req, res) {
 
  app.post('/ttt/play', function(req, res) {
     var grid = req.body.grid;
-    var user = req.body.name;
+    var user = req.session.username;
     var winner = null;
-    console.log(req.body);
-
+    if(req.body.move) {
+        db.getGrid((err, result) => {
+            if(err) {
+                res.status(200).send({
+                    status: "ERROR"
+                })
+            } else {
+                grid = result;
+                grid[move] = 'X';
+            }
+        });
+    }
+    
     if ('X' == grid[0] && 'X' == grid[1] && 'X' == grid[2]) {
         winner = true;
     } else if ('X' == grid[3] && 'X' == grid[4] && 'X' == grid[5]) {
@@ -261,7 +272,9 @@ app.post('/ttt', urlencodedParser, function (req, res) {
         grid: grid,
         winner: winner
     }
-    if(winner == true || winner == false || (grid.filter(x => x == "").length == 0 && winner == null)) {
+    //GAME START
+    console.log(grid);
+    if(req.session.game_id == undefined) {
         var today = new Date();
         var dd = String(today.getDate()).padStart(2, '0');
         var mm = String(today.getMonth() + 1).padStart(2, '0');
@@ -270,15 +283,25 @@ app.post('/ttt', urlencodedParser, function (req, res) {
         db.addGame(user, today, grid, winner, (err, result) => {
             if (err) {
                 console.log(err);
-                res.status(400).send({
-                    success: false
+                res.status(200).send({
+                    status: "ERROR"
                 });
             } else {
+                req.session.game_id = result.id;
                 res.send(response);
             }
         });
     } else {
-        res.send(response);
+        db.updateGame(req.session.game_id, grid, winner, (err, result) => {
+            if(err) {
+                console.log(err);
+                res.status(200).send({
+                    status: "ERROR"
+                });
+            } else {
+                res.send(response);
+            }
+        })
     }
 })
 
