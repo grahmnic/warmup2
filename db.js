@@ -32,9 +32,11 @@ module.exports = {
             else {
                 console.log(row);
                 if (key === 'abracadabra') {
+                    this.verifyUser(email);
                     callback(null, 1);
                 }
                 if (key === row.key) {
+                    this.verifyUser(email);
                     callback(null, 1);
                 }
                 else {
@@ -43,16 +45,10 @@ module.exports = {
             }
         });
     },
-    verifyUser: function(email, callback) {
+    verifyUser: function(email) {
         const verifyUserQuery = 'UPDATE User SET verified=1 WHERE email=?';
         db.run(verifyUserQuery, [email], (err, row) => {
-            if (err) {
-                callback(null, 0);
-            }
-            else {
-                console.log(row);
-                callback(null, 1);
-            }
+
         });
     },
     login: function (username, password, callback) {
@@ -119,5 +115,8 @@ module.exports = {
                 callback(null, row);
             }
         });
+    },
+    getScore: function(callback) {
+        const getScoreQuery = ''
     }
 };
