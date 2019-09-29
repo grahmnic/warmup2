@@ -18,37 +18,18 @@ module.exports = {
                 callback(err);
             }
             else {
-                console.log(rows);
                 callback(null, rows);
             }
         });
     },
     verify: function (email, key, callback) {
-        const getKeyQuery = 'SELECT key FROM User WHERE email=?';
-        db.get(getKeyQuery, [email], (err, row) => {
+        console.log(email + key);
+        const getKeyQuery = 'UPDATE User SET verified=1 WHERE email=? AND key=?';
+        db.run(getKeyQuery, [email, key], (err, row) => {
             if (err) {
-                callback(err);
+                callback(null, 0);
             }
             else {
-                console.log(row);
-                if (key === 'abracadabra') {
-                    this.verifyUser(email, callback);
-                }
-                if (key === row.key) {
-                    this.verifyUser(email, callback);
-                }
-                else {
-                    callback(null, 0);
-                }
-            }
-        });
-    },
-    verifyUser: function(email, callback) {
-        const verifyUserQuery = 'UPDATE User SET verified=1 WHERE email=?';
-        db.run(verifyUserQuery, [email], (err, row) => {
-            if(err) {
-                callback(null, 0);
-            } else {
                 callback(null, 1);
             }
         });
