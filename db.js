@@ -11,104 +11,114 @@ let db = new sqlite3.Database('warmup2.db', sqlite3.OPEN_READWRITE, (err) => {
 });
 
 module.exports = {
-    // Get all menu sections
-    getAllMenuSections: function (callback) {
-        const getAllQuery = 'SELECT * FROM menusection';
-        db.all(getAllQuery, [], (err, rows) => {
+    addUser: function (username, password, email, callback) {
+        const addUserQuery = 'INSERT INTO User() VALUES(?,?,?)';
+        db.run(addUserQuery, [username, password, email], (err, rows) => {
             if (err) {
                 callback(err);
             }
             else {
-                let MenuSection = [];
-
-                rows.forEach((row) => {
-                    MenuSection.push(row);
-                    //console.log(row);
-                });
-                callback(null, MenuSection);
-                //console.log(MenuSection);
+                console.log(rows);
+                callback(null, rows);
             }
         });
     },
-    // Get menu section by ID
-    getMenuSectionById: function (id, callback) {
-        const getIdQuery = 'SELECT * FROM menusection WHERE id=?';
-        db.all(getIdQuery, [id], (err, rows) => {
-            if (err) {
-                //console.log(err);
-                //throw err;//CATCH
-                callback(err);
-            }
-            else {
-                let MenuSection = [];
-
-                rows.forEach((row) => {
-                    MenuSection.push(row);
-                    console.log(row);
-                });
-                console.log(MenuSection);
-                callback(null, MenuSection);
-            }
-        });
-    },
-    //Add menu section with name, increment ID
-    addMenuSection: function (name, callback) {
-        const getIdQuery = 'INSERT INTO menusection(name) VALUES(?)';
-        db.all(getIdQuery, [name], (err, rows) => {
+    verify: function (username, key, callback) {
+        const getKeyQuery = 'SELECT key FROM User WHERE username=?';
+        db.get(getKeyQuery, [username], (err, row) => {
             if (err) {
                 callback(err);
             }
             else {
-                const getNewEntryQuery = 'SELECT * FROM menusection WHERE name=?';
-                db.all(getNewEntryQuery, [name], (error, rows) => {
-                    if (error) {
-                        callback(error);
-                    }
-                    else {
-                        let MenuSection = [];
-                        rows.forEach((row) => {
-                            MenuSection.push(row);
-                        });
-                        callback(null, MenuSection);
-                    }
-                });
+                console.log(row);
+                if (key === 'abracadabra') {
+                    callback(null, 1);
+                }
+                if (key === row.key) {
+                    callback(null, 1);
+                }
+                else {
+                    callback(null, 0);
+                }
             }
         });
     },
-    //Edit name of menu section at ID
-    editMenuSection: function (id, name, callback) {
-        const getIdQuery = 'UPDATE menusection SET name=? WHERE id=?';
-        db.all(getIdQuery, [name, id], (err, rows) => {
+    login: function (username, password, callback) {
+        const loginQuery = 'SELECT password FROM User WHERE username = ?';
+        db.get(loginQuery, [username], (err, row) => {
+            if (err) {
+                callback(null, 0);//username not found
+            }
+            else {
+                console.log(row);
+                if (password === row.password) {
+                    callback(null, 1);
+                }
+                else {
+                    callback(null, 0);
+                }
+            }
+        });
+    },
+    getAllGames: function (callback) {
+        const getGamesQuery = 'SELECT * FROM Games';
+        db.all(getGamesQuery, [], (err, rows) => {
             if (err) {
                 callback(err);
             }
             else {
-                const getNewEntryQuery = 'SELECT * FROM menusection WHERE id=?';
-                db.all(getNewEntryQuery, [id], (error, rows) => {
-                    if (error) {
-                        callback(error);
-                    }
-                    else {
-                        let MenuSection = [];
-                        rows.forEach((row) => {
-                            MenuSection.push(row);
-                        });
-                        callback(null, MenuSection);
-                    }
-                });
+                console.log(rows);
+                callback(null, rows);
             }
         });
     },
-    //Delete tuple with id
-    deleteMenuSection: function (id, callback) {
-        const getIdQuery = 'DELETE FROM menusection WHERE id=?';
-        db.all(getIdQuery, [id], (err, rows) => {
+    getGamesByUsername: function (username, callback) {
+        const getIdQuery = 'SELECT * FROM Games WHERE username = ?';
+        db.all(getIdQuery, [username], (err, rows) => {
             if (err) {
                 callback(err);
             } else {
+                console.log(rows);
                 callback(null, rows);
             }
 
         });
+    },
+    addGameByUsername: function (username, callback) {
+        const getIdQuery = 'SELECT * FROM Games WHERE username = ?';
+        db.all(getIdQuery, [username], (err, rows) => {
+            if (err) {
+                callback(err);
+            } else {
+                console.log(rows);
+                callback(null, rows);
+            }
+
+        });
+    },
+    getUser: function (username, callback) {
+        const getUserQuery = 'SELECT * FROM User WHERE username = ?';
+        db.get(getUserQuery, [username], (err, row) => {
+            if (err) {
+                callback(err);
+            } else {
+                console.log(row);
+                callback(null, row);
+            }
+
+        });
+    },
+    addGameByUsername: function (username, callback) {
+        const getUserQuery = 'Insert';
+        db.get(getUserQuery, [username], (err, row) => {
+            if (err) {
+                callback(err);
+            } else {
+                console.log(row);
+                callback(null, row);
+            }
+
+        });
     }
+
 };
