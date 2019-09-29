@@ -199,35 +199,26 @@ app.post('/ttt', urlencodedParser, function (req, res) {
  });
 
  app.post('/ttt/play', function(req, res) {
-    console.log(req.body.move);
-    console.log(req.session.game_id);
     var grid = req.body.grid;
     var user = req.session.username;
     var winner = null;
     if(req.body.move) {
-        if(req.session.winner === null) {
-            if(req.session.game_id === undefined) {
-                grid = [' ',' ',' ',' ',' ',' ',' ',' ',' '];
-                grid[req.body.move] = 'X';
-            } else {
-                grid = req.session.grid;
-                grid[req.body.move] = 'X';
-                // db.getGrid((err, result) => {
-                //     if(err) {
-                //         res.status(200).send({
-                //             status: "ERROR"
-                //         })
-                //     } else {
-                //         grid = result;
-                //         grid[req.body.move] = 'X';
-                //     }
-                // });
-            }
-        } else {
+        if(req.session.game_id === undefined) {
             grid = [' ',' ',' ',' ',' ',' ',' ',' ',' '];
             grid[req.body.move] = 'X';
-            req.session.grid = grid;
-            req.session.winner = null;
+        } else {
+            grid = req.session.grid;
+            grid[req.body.move] = 'X';
+            // db.getGrid((err, result) => {
+            //     if(err) {
+            //         res.status(200).send({
+            //             status: "ERROR"
+            //         })
+            //     } else {
+            //         grid = result;
+            //         grid[req.body.move] = 'X';
+            //     }
+            // });
         }
     } else if (req.body.move === null) {
         var response = {
@@ -235,7 +226,6 @@ app.post('/ttt', urlencodedParser, function (req, res) {
         }
         res.send(response);
     }
-    console.log("BEFORE: " + grid);
     
     if ('X' == grid[0] && 'X' == grid[1] && 'X' == grid[2]) {
         winner = true;
@@ -288,9 +278,9 @@ app.post('/ttt', urlencodedParser, function (req, res) {
     }
     req.session.grid = grid;
     req.session.winner = winner;
-    console.log("AFTER: " + grid);
     //GAME START
     if(req.session.game_id === undefined) {
+        console.log("ADDING NEW GAME");
         var today = new Date();
         var dd = String(today.getDate()).padStart(2, '0');
         var mm = String(today.getMonth() + 1).padStart(2, '0');
@@ -307,12 +297,22 @@ app.post('/ttt', urlencodedParser, function (req, res) {
             }
         });
     } else {
+        console.log("UPDATING GAME");
+        console.log(grid);
         db.updateGame(req.session.game_id, grid, winner, (err, result) => {
             if(err) {
                 res.status(200).send({
                     status: "ERROR"
                 });
             } else {
+                if(winner === true || winner === false || grid.filter(x => x === " ").length == 0) {
+                    // RESET GAME
+                    console.log(winner);
+                    console.log("RESETTING GAME");
+                    req.session.game_id = undefined
+                    req.session.grid = null;
+                    req.session.winner = null;
+                }
                 res.send(response);
             }
         })
