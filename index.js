@@ -9,12 +9,24 @@ app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+//CONNECT DATABASE
 let db = new sqlite3.Database('warmup2.db', sqlite3.OPEN_READWRITE, (err) => {
     if (err) {
       console.error(err.message);
     }
     console.log('Connected to the warmup2 database.');
-  });
+});
+
+//SIGN UP
+app.post('/signup', function (req, res) {
+    var username = req.body.username;
+    var password = req.body.password;
+    var email = req.body.email;
+    
+    db.run(sql, params, function(err){
+        // 
+    });
+})
 
 app.get('/ttt', function (req, res) {
    console.log("GET");
