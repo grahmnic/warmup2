@@ -107,13 +107,8 @@ app.post('/ttt', urlencodedParser, function (req, res) {
     var key = req.body.key;
 
     db.verify(email, key, (err, result) => {
-        if (err) {
-            console.log("Error: " + err);
-            res.status(400).send({
-                success: false
-            });
-        }
-        else if (result == 1) {
+        console.log("verify: " + result);
+        if (result == 1) {
             res.status(200).send({
                 status: "OK"
             });
