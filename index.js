@@ -212,7 +212,7 @@ app.post('/ttt', urlencodedParser, function (req, res) {
     var winner = null;
     if(req.body.move) {
         if(req.session.game_id == undefined) {
-            grid = ['','','','','','','','',''];
+            grid = [' ',' ',' ',' ',' ',' ',' ',' ',' '];
             grid[req.body.move] = 'X';
         } else {
             db.getGrid((err, result) => {
@@ -246,12 +246,12 @@ app.post('/ttt', urlencodedParser, function (req, res) {
         winner = true;
     } else {
         // DO RANDOM MOVE
-        if(grid.filter(x => x == '').length != 0) {
+        if(grid.filter(x => x == ' ').length != 0) {
             var dict = [];
             for(var i = 0; i < grid.length; i++) {
                 dict.push({index: i, val: grid[i]});
             }
-            dict = dict.filter(x => x.val == '');
+            dict = dict.filter(x => x.val == ' ');
             grid[dict[Math.floor(Math.random() * dict.length)].index] = 'O';
         }
 

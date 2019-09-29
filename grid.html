@@ -57,13 +57,13 @@
     </body>
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
         <script>
-            var grid = ['','','','','','','','',''];
+            var grid = [' ',' ',' ',' ',' ',' ',' ',' ',' '];
             var winner = null;
 
             $(document).ready(function() {
                 $("td").click(function() {
                     var val = $(this).html();
-                    if (val == '' && winner == null) {
+                    if (val == ' ' && winner == null) {
                         var id = parseInt($(this).attr('id')) - 1;
                         grid[id] = 'X';
                         var xml = new XMLHttpRequest();

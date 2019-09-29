@@ -90,7 +90,7 @@ module.exports = {
                 res.grid = rows.grid.split(",");
                 for(var i = 0; i < res.grid.length; i++) {
                     if(res.grid[i] == null) {
-                        res.grid[i] = '';
+                        res.grid[i] = ' ';
                     }
                 }
                 res.winner = rows.winner;
@@ -150,7 +150,7 @@ module.exports = {
                 var arr = res.grid.split(",");
                 for(var i = 0; i < arr.length; i++) {
                     if(arr[i] == null) {
-                        arr[i] = "";
+                        arr[i] = " ";
                     }
                 }
                 callback(null, arr);
