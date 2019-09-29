@@ -15,7 +15,7 @@ let transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
         user: 'cloud356ttt@gmail.com',
-        password: 'cse356-cloud',
+        pass: 'cse356-cloud',
     }
 });
 
@@ -132,12 +132,12 @@ app.post('/ttt', urlencodedParser, function (req, res) {
     });
  })
 
- app.verify('/ttt/verify', function(req, res) {
+ app.post('/ttt/verify', function(req, res) {
     var email = req.body.email;
     var key = req.body.key;
 
 
- })
+ });
 
  app.post('/ttt/play', function(req, res) {
     var grid = req.body.grid;
