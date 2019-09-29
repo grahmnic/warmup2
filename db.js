@@ -12,6 +12,14 @@ let db = new sqlite3.Database('warmup2.db', sqlite3.OPEN_READWRITE, (err) => {
 
 module.exports = {
     // Get all menu sections
+    addGame: function(user_id, start_date, grid, winner, callback) {
+        const addGameQuery = 'INSERT INTO Games(user_id, start_date, grid, winner) VALUES (?,?,?,?)';
+        db.run(addGameQuery, [user_id, start_date, grid, winner], function(err) {
+            if (err) {
+                console.log(err.message);
+            }
+        });
+    },
     getAllMenuSections: function (callback) {
         const getAllQuery = 'SELECT * FROM menusection';
         db.all(getAllQuery, [], (err, rows) => {
