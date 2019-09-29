@@ -199,6 +199,9 @@ app.post('/ttt', urlencodedParser, function (req, res) {
  });
 
  app.post('/ttt/play', function(req, res) {
+     console.log(req.body.move);
+     console.log(req.session.game_id);
+     console.log(req.session.grid);
     var grid = req.body.grid;
     var user = req.session.username;
     var winner = null;
