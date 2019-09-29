@@ -4,6 +4,7 @@ var app = express();
 var session = require('express-session');
 var bodyParser = require('body-parser');
 const sqlite3 = require('sqlite3').verbose();
+var path = require('path');
 var urlencodedParser = bodyParser.urlencoded({ extended: true })
 const db = require('./db.js');
 const nodemailer = require('nodemailer');
@@ -20,6 +21,12 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.get('/ttt', function (req, res) {
     console.log("GET");
     res.sendFile(__dirname + "/" + "index.html");
+    if (req.session.loggedin) {
+        console.log('Logged in');
+        res.sendFile(__dirname + "/" + "logout.html");
+    } else {
+        console.log('Please login.');
+    }
 })
 
 app.post('/ttt', urlencodedParser, function (req, res) {
@@ -131,13 +138,12 @@ app.post('/ttt', urlencodedParser, function (req, res) {
                 success: false
             });
         }
-        else if (result == 1) {       
+        else if (result == 1) {   
             req.session.loggedin = true;
             req.session.username = username;
-            res.redirect('/');
             res.status(200).send({
                 status: "OK"
-            });
+            });   
         }
         else {
             res.status(200).send({
@@ -145,11 +151,10 @@ app.post('/ttt', urlencodedParser, function (req, res) {
             })
         }
      });
-
  })
 
  app.post('/logout', function(req, res) {
-
+    
  })
 
  app.post('/listgames', function(req, res) {
