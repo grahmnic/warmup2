@@ -107,6 +107,38 @@ app.post('/ttt', urlencodedParser, function (req, res) {
     res.end();
 })
 
+ app.post('/ttt/adduser', function(req, res) {
+    var username = req.body.username;
+    var password = req.body.password;
+    var email = req.body.email;
+
+    db.addUser(username, password, email, (err, result) => {
+        if (err) {
+            res.status(400).send({
+                success: false
+            });
+        }
+        if (result != undefined && result.length != 0) {
+            res.status(200).send({
+                MenuSection: result
+            });
+        }
+        else {
+            res.status(404).send({
+                success: false,
+                message: ''
+            });
+        }
+    });
+ })
+
+ app.verify('/ttt/verify', function(req, res) {
+    var email = req.body.email;
+    var key = req.body.key;
+
+
+ })
+
  app.post('/ttt/play', function(req, res) {
     var grid = req.body.grid;
     var user = req.body.user;
@@ -193,6 +225,8 @@ app.post('/ttt', urlencodedParser, function (req, res) {
     }
     res.send(response);
 })
+
+
 
 var server = app.listen(80, function () {
     var host = server.address().address

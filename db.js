@@ -11,9 +11,9 @@ let db = new sqlite3.Database('warmup2.db', sqlite3.OPEN_READWRITE, (err) => {
 });
 
 module.exports = {
-    addUser: function (username, password, email, callback) {
-        const addUserQuery = 'INSERT INTO User() VALUES(?,?,?)';
-        db.run(addUserQuery, [username, password, email], (err, rows) => {
+    addUser: function (username, password, email, key, callback) {
+        const addUserQuery = 'INSERT INTO User(username,password,email,key) VALUES(?,?,?)';
+        db.run(addUserQuery, [username, password, email, key], (err, rows) => {
             if (err) {
                 callback(err);
             }
