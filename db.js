@@ -11,9 +11,9 @@ let db = new sqlite3.Database('warmup2.db', sqlite3.OPEN_READWRITE, (err) => {
 });
 
 module.exports = {
-    addUser: function (username, password, email, callback) {
-        const addUserQuery = 'INSERT INTO User() VALUES(?,?,?)';
-        db.run(addUserQuery, [username, password, email], (err, rows) => {
+    addUser: function (username, password, email, key, callback) {
+        const addUserQuery = 'INSERT INTO User(username,password,email,key) VALUES(?,?,?)';
+        db.run(addUserQuery, [username, password, email, key], (err, rows) => {
             if (err) {
                 callback(err);
             }
@@ -73,20 +73,8 @@ module.exports = {
         });
     },
     getGamesByUsername: function (username, callback) {
-        const getIdQuery = 'SELECT * FROM Games WHERE username = ?';
-        db.all(getIdQuery, [username], (err, rows) => {
-            if (err) {
-                callback(err);
-            } else {
-                console.log(rows);
-                callback(null, rows);
-            }
-
-        });
-    },
-    addGameByUsername: function (username, callback) {
-        const getIdQuery = 'SELECT * FROM Games WHERE username = ?';
-        db.all(getIdQuery, [username], (err, rows) => {
+        const getGamesQuery = 'SELECT * FROM Games WHERE username = ?';
+        db.all(getGamesQuery, [username], (err, rows) => {
             if (err) {
                 callback(err);
             } else {
@@ -108,9 +96,21 @@ module.exports = {
 
         });
     },
-    addGameByUsername: function (username, callback) {
-        const getUserQuery = 'Insert';
-        db.get(getUserQuery, [username], (err, row) => {
+    addGameByUsername: function (username, date, callback) {
+        const getUserQuery = 'INSERT INTO Games(username,start_date,grid) VALUES(?,?,?)';
+        db.run(getUserQuery, [username,date, '         '], (err, row) => {
+            if (err) {
+                callback(err);
+            } else {
+                console.log(row);
+                callback(null, row);
+            }
+
+        });
+    },
+    updateGameByID: function (id, grid, callback) {
+        const getUserQuery = 'UPDATE Games WHERE game_id =? SET grid = ?';
+        db.run(getUserQuery, [id,grid], (err, row) => {
             if (err) {
                 callback(err);
             } else {
@@ -120,5 +120,4 @@ module.exports = {
 
         });
     }
-
 };
