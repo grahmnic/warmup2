@@ -32,12 +32,10 @@ module.exports = {
             else {
                 console.log(row);
                 if (key === 'abracadabra') {
-                    this.verifyUser(email);
-                    callback(null, 1);
+                    this.verifyUser(email, callback);
                 }
                 if (key === row.key) {
-                    this.verifyUser(email);
-                    callback(null, 1);
+                    this.verifyUser(email, callback);
                 }
                 else {
                     callback(null, 0);
@@ -48,7 +46,11 @@ module.exports = {
     verifyUser: function(email) {
         const verifyUserQuery = 'UPDATE User SET verified=1 WHERE email=?';
         db.run(verifyUserQuery, [email], (err, row) => {
-
+            if(err) {
+                callback(null, 0);
+            } else {
+                callback(null, 1);
+            }
         });
     },
     login: function (username, password, callback) {
