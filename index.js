@@ -2,39 +2,14 @@ var express = require('express');
 var fs = require("fs");
 var app = express();
 var bodyParser = require('body-parser');
-//const sqlite3 = require('sqlite3').verbose();
+const sqlite3 = require('sqlite3').verbose();
 var urlencodedParser = bodyParser.urlencoded({ extended: true })
 const db = require('./db.js');
+const nodemailer = require('nodemailer');
 
 app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-
-//SAMPLE
-app.get('/menusection/:id', (req, res) => {
-    const id = parseInt(req.params.id);
-    db.addUser(username, password, email, (err, result) => {
-        if (err) {
-            console.log("err");
-            console.log(err);
-            res.status(400).send({
-                success: false
-            });
-        }
-        if (result != undefined && result.length != 0) {
-            res.status(200).send({
-                MenuSection: result
-            });
-        }
-        else {
-            res.status(404).send({
-                success: false,
-                message: 'id not found'
-            });
-        }
-    });
-
-});
 
 app.get('/ttt', function (req, res) {
     console.log("GET");
@@ -58,7 +33,7 @@ app.post('/ttt', urlencodedParser, function (req, res) {
     res.end();
 })
 
- app.post('/ttt/adduser', urlencodedParser, function(req, res) {
+ app.post('/adduser', urlencodedParser, function(req, res) {
     var username = req.body.username;
     var password = req.body.password;
     var email = req.body.email;
@@ -72,6 +47,28 @@ app.post('/ttt', urlencodedParser, function (req, res) {
             });
         }
         else {
+            //SEND EMAIL
+            let transporter = nodemailer.createTransport({
+                service: 'gmail',
+                auth: {
+                    user: 'cloud356ttt@gmail.com',
+                    pass: 'cse356-cloud',
+                }
+            });
+            
+            let mailOptions = {
+                from: 'cloud356ttt@gmail.com',
+                to: 'chinkylsx@gmail.com',
+                subject: 'Verify your email.',
+                text: 'validation key: ' + '<' + key + '>',
+            };
+            
+            transporter.sendMail(mailOptions)
+                .then(function(response) {
+                    console.log('Email sent');
+                }).catch(function(error) {
+                    console.log('Error ', error);
+                });
             res.status(200).send({
                 status: "OK"
             });
@@ -79,7 +76,7 @@ app.post('/ttt', urlencodedParser, function (req, res) {
     });
  })
 
- app.post('/ttt/verify', function(req, res) {
+ app.post('/verify', function(req, res) {
     var email = req.body.email;
     var key = req.body.key;
 
@@ -103,27 +100,27 @@ app.post('/ttt', urlencodedParser, function (req, res) {
     });
  })
 
- app.post('/ttt/login', function(req, res) {
+ app.post('/login', function(req, res) {
      var username = req.body.username;
      var password = req.body.password;
 
  })
 
- app.post('/ttt/logout', function(req, res) {
+ app.post('/logout', function(req, res) {
 
  })
 
- app.post('/ttt/listgames', function(req, res) {
+ app.post('/listgames', function(req, res) {
 
  })
 
- app.post('/ttt/getgame', function(req, res) {
+ app.post('/getgame', function(req, res) {
 
  }) 
 
- app.post('/ttt/getscore', function(req, res) {
+ app.post('/getscore', function(req, res) {
 
- })
+ });
 
  app.post('/ttt/play', function(req, res) {
     var grid = req.body.grid;
