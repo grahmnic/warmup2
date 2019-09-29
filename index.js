@@ -94,9 +94,23 @@ app.post('/ttt', urlencodedParser, function (req, res) {
             });
         }
         else if (result == 1) {
-            res.status(200).send({
-                status: "OK"
-            });
+            db.verifyUser(email, (err, result) => {
+                if (err) {
+                    res.status(400).send({
+                        success: false
+                    });
+                }
+                else if (result == 1) {
+                    res.status(200).send({
+                        status: "OK"
+                    });
+                }
+                else {
+                    res.status(200).send({
+                        status: "ERROR"
+                    })
+                }
+            })
         }
         else {
             res.status(200).send({
@@ -139,11 +153,34 @@ app.post('/ttt', urlencodedParser, function (req, res) {
  })
 
  app.post('/listgames', function(req, res) {
-
+    db.getAllGames((err, result) => {
+        if (err) {
+            res.status(200).send({
+                status: "ERROR"
+            })
+        } else {
+            res.status(200).send({
+                status: "OK",
+                games: result
+            })
+        }
+    })
  })
 
  app.post('/getgame', function(req, res) {
-
+    var id = req.body.id;
+    db.getGamesById(id, (err, result) => {
+        if(err) {
+            res.status(200).send({
+                status: "ERROR"
+            })
+        } else {
+            res.status(200).send({
+                status: "OK",
+                grid: result
+            })
+        }
+    })
  }) 
 
  app.post('/getscore', function(req, res) {
@@ -204,7 +241,7 @@ app.post('/ttt', urlencodedParser, function (req, res) {
         grid: grid,
         winner: winner
     }
-    if(winner == true || winner == false) {
+    if(winner == true || winner == false || (grid.filter(x => x == "").length == 0 && winner == null)) {
         var today = new Date();
         var dd = String(today.getDate()).padStart(2, '0');
         var mm = String(today.getMonth() + 1).padStart(2, '0');
@@ -212,27 +249,12 @@ app.post('/ttt', urlencodedParser, function (req, res) {
         today = mm + '/' + dd + '/' + yyyy;
         db.addGame(user, today, grid, winner, (err, result) => {
             if (err) {
-                console.log("err");
                 console.log(err);
                 res.status(400).send({
                     success: false
                 });
             }
-            if (result != undefined && result.length != 0) {
-                // res.status(200).send({
-                //     MenuSection: result
-                // });
-            }
-            else {
-                // res.status(404).send({
-                //     success: false,
-                //     message: 'id not found'
-                // });
-            }
         });
-    }
-    if (grid.filter(x => x == "").length == 0 && winner == null) {
-        
     }
     res.send(response);
 })

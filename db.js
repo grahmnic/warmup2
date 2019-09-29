@@ -43,6 +43,18 @@ module.exports = {
             }
         });
     },
+    verifyUser: function(email, callback) {
+        const verifyUserQuery = 'UPDATE User SET verified=1 WHERE email=?';
+        db.run(verifyUserQuery, [email], (err, row) => {
+            if (err) {
+                callback(null, 0);
+            }
+            else {
+                console.log(row);
+                callback(null, 1);
+            }
+        });
+    },
     login: function (username, password, callback) {
         const loginQuery = 'SELECT password FROM User WHERE username = ?';
         db.get(loginQuery, [username], (err, row) => {
@@ -72,9 +84,9 @@ module.exports = {
             }
         });
     },
-    getGamesByUsername: function (username, callback) {
-        const getGamesQuery = 'SELECT * FROM Games WHERE username = ?';
-        db.all(getGamesQuery, [username], (err, rows) => {
+    getGamesById: function (id, callback) {
+        const getGamesQuery = 'SELECT * FROM Games WHERE game_id = ?';
+        db.all(getGamesQuery, [id], (err, rows) => {
             if (err) {
                 callback(err);
             } else {
@@ -96,28 +108,16 @@ module.exports = {
 
         });
     },
-    addGameByUsername: function (username, date, callback) {
-        const getUserQuery = 'INSERT INTO Games(username,start_date,grid) VALUES(?,?,?)';
-        db.run(getUserQuery, [username,date, '         '], (err, row) => {
+    addGame: function (username, date, grid, winner, callback) {
+        var grid_str = grid.join();
+        const getUserQuery = 'INSERT INTO Games(username,start_date,grid,winner) VALUES(?,?,?,?)';
+        db.run(getUserQuery, [username,date,grid_str,winner], (err, row) => {
             if (err) {
                 callback(err);
             } else {
                 console.log(row);
                 callback(null, row);
             }
-
-        });
-    },
-    updateGameByID: function (id, grid, callback) {
-        const getUserQuery = 'UPDATE Games WHERE game_id =? SET grid = ?';
-        db.run(getUserQuery, [id,grid], (err, row) => {
-            if (err) {
-                callback(err);
-            } else {
-                console.log(row);
-                callback(null, row);
-            }
-
         });
     }
 };
