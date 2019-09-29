@@ -33,8 +33,12 @@ app.post('/ttt', urlencodedParser, function (req, res) {
     res.end();
 })
 
+<<<<<<< HEAD
  app.post('/ttt/adduser', urlencodedParser, function(req, res) {
     console.log("TEST");
+=======
+ app.post('/adduser', urlencodedParser, function(req, res) {
+>>>>>>> 4715994ecca85db7386d355450e379777843ba83
     var username = req.body.username;
     var password = req.body.password;
     var email = req.body.email;
@@ -77,7 +81,7 @@ app.post('/ttt', urlencodedParser, function (req, res) {
     });
  })
 
- app.post('/ttt/verify', function(req, res) {
+ app.post('/verify', function(req, res) {
     var email = req.body.email;
     var key = req.body.key;
 
@@ -101,25 +105,25 @@ app.post('/ttt', urlencodedParser, function (req, res) {
     });
  })
 
- app.post('/ttt/login', function(req, res) {
+ app.post('/login', function(req, res) {
      var username = req.body.username;
      var password = req.body.password;
 
  })
 
- app.post('/ttt/logout', function(req, res) {
+ app.post('/logout', function(req, res) {
 
  })
 
- app.post('/ttt/listgames', function(req, res) {
+ app.post('/listgames', function(req, res) {
 
  })
 
- app.post('/ttt/getgame', function(req, res) {
+ app.post('/getgame', function(req, res) {
 
  }) 
 
- app.post('/ttt/getscore', function(req, res) {
+ app.post('/getscore', function(req, res) {
 
  });
 
