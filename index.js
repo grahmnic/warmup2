@@ -205,27 +205,35 @@ app.post('/ttt', urlencodedParser, function (req, res) {
     var user = req.session.username;
     var winner = null;
     if(req.body.move) {
-        if(req.session.game_id === undefined) {
+        if(req.session.winner === null) {
+            if(req.session.game_id === undefined) {
+                grid = [' ',' ',' ',' ',' ',' ',' ',' ',' '];
+                grid[req.body.move] = 'X';
+            } else {
+                grid = req.session.grid;
+                grid[req.body.move] = 'X';
+                // db.getGrid((err, result) => {
+                //     if(err) {
+                //         res.status(200).send({
+                //             status: "ERROR"
+                //         })
+                //     } else {
+                //         grid = result;
+                //         grid[req.body.move] = 'X';
+                //     }
+                // });
+            }
+        } else {
             grid = [' ',' ',' ',' ',' ',' ',' ',' ',' '];
             grid[req.body.move] = 'X';
-        } else {
-            grid = req.session.grid;
-            grid[req.body.move] = 'X';
-            // db.getGrid((err, result) => {
-            //     if(err) {
-            //         res.status(200).send({
-            //             status: "ERROR"
-            //         })
-            //     } else {
-            //         grid = result;
-            //         grid[req.body.move] = 'X';
-            //     }
-            // });
+            req.session.grid = grid;
+            req.session.winner = null;
         }
     } else if (req.body.move === null) {
-        res.status(200).send({
-            status: "ERROR"
-        })
+        var response = {
+            grid: req.session.grid
+        }
+        res.send(response);
     }
     console.log("BEFORE: " + grid);
     
@@ -279,6 +287,7 @@ app.post('/ttt', urlencodedParser, function (req, res) {
         winner: winner
     }
     req.session.grid = grid;
+    req.session.winner = winner;
     console.log("AFTER: " + grid);
     //GAME START
     if(req.session.game_id === undefined) {
