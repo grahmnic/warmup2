@@ -2,7 +2,6 @@ var express = require('express');
 var fs = require("fs");
 var app = express();
 var bodyParser = require('body-parser');
-const sqlite3 = require('sqlite3').verbose();
 var urlencodedParser = bodyParser.urlencoded({ extended: true })
 
 app.use(express.static(__dirname + '/public'));
