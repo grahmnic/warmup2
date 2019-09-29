@@ -7,7 +7,6 @@ let db = new sqlite3.Database('warmup2.db', sqlite3.OPEN_READWRITE, (err) => {
     if (err) {
         console.error(err.message);
     }
-    console.log('Connected to the warmup2 database.');
 });
 
 module.exports = {
@@ -23,18 +22,14 @@ module.exports = {
         });
     },
     verify: function (email, key, callback) {
-        console.log(email + key);
         const getKeyQuery = 'UPDATE User SET verified=1 WHERE email=? AND (key=? OR ?="abracadabra")';
         db.run(getKeyQuery, [email, key, key], (err, row) => {
             if (err) {
-                console.log(err);
                 callback(null, 0);
             }
             else {
                 db.get('SELECT verified FROM User WHERE email=?', [email], (err, result) => {
-                    console.log(result);
                     if(err) {
-                        console.log(err);
                         callback(null, 0);
                     } else if (result.verified === 1) {
                         callback(null, 1);
@@ -52,9 +47,7 @@ module.exports = {
                 callback(null, 0);//username not found
             }
             else {
-                console.log(row);
                 if (password === row.password && row.verified === 1) {
-                    console.log('1');
                     callback(null, 1);
                 }
                 else {
@@ -70,8 +63,6 @@ module.exports = {
                 callback(err);
             }
             else {
-                console.log(username);
-                console.log(rows);
                 var arr = [];
                 for(var i = 0; i < rows.length; i++) {
                     arr.push({id: rows[i].game_id, start_date: rows[i].start_date});
@@ -105,7 +96,6 @@ module.exports = {
             if (err) {
                 callback(err);
             } else {
-                console.log(row);
                 callback(null, row);
             }
 
@@ -120,7 +110,6 @@ module.exports = {
             } else {
                 db.get('SELECT max(game_id) AS id FROM Games', [], (err, result) => {
                     if(err) {
-                        console.log(err);
                         callback(null, 0);
                     } else {
                         callback(null, result);
@@ -146,7 +135,6 @@ module.exports = {
             if(err) {
                 callback(err);
             } else {
-                console.log(res);
                 var arr = res.grid.split(",");
                 for(var i = 0; i < arr.length; i++) {
                     if(arr[i] == null) {

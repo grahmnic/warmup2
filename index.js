@@ -25,25 +25,20 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.get('/ttt', function (req, res) {
     res.sendFile(__dirname + "/" + "index.html");
     if (req.session.loggedin) {
-        console.log('Logged in');
         res.redirect('/logout');
     } else {
-        console.log('Please login.');
     }
 })
 
 app.get('/logout', function (req, res) {
     res.sendFile(__dirname + "/" + "logout.html");
     if (!req.session.loggedin) {
-        console.log('LOGGED OUT')
         res.redirect('/ttt');
     } else {
-        console.log('Error logging out');
     }
 })
 
 app.post('/ttt', urlencodedParser, function (req, res) {
-    console.log("POST FORM");
     response = {
         name: req.body.name
     };
@@ -67,7 +62,6 @@ app.post('/ttt', urlencodedParser, function (req, res) {
 
     db.addUser(username, password, email, key, (err, result) => {
         if (err) {
-            console.log("Error: " + err);
             res.status(400).send({
                 success: false
             });
@@ -91,9 +85,9 @@ app.post('/ttt', urlencodedParser, function (req, res) {
             
             transporter.sendMail(mailOptions)
                 .then(function(response) {
-                    console.log('Email sent');
+
                 }).catch(function(error) {
-                    console.log('Error ', error);
+
                 });
             res.status(200).send({
                 status: "OK"
@@ -107,7 +101,6 @@ app.post('/ttt', urlencodedParser, function (req, res) {
     var key = req.body.key;
 
     db.verify(email, key, (err, result) => {
-        console.log("verify: " + result);
         if (result == 1) {
             res.status(200).send({
                 status: "OK"
@@ -127,7 +120,6 @@ app.post('/ttt', urlencodedParser, function (req, res) {
 
      db.login(username, password, (err, result) => {
         if (err) {
-            console.log("Error: " + err);
             res.status(400).send({
                 success: false
             });
@@ -207,6 +199,7 @@ app.post('/ttt', urlencodedParser, function (req, res) {
  });
 
  app.post('/ttt/play', function(req, res) {
+    console.log(req.body.move);
     var grid = req.body.grid;
     var user = req.session.username;
     var winner = null;
@@ -231,6 +224,7 @@ app.post('/ttt', urlencodedParser, function (req, res) {
             status: "ERROR"
         })
     }
+    console.log("BEFORE: " + grid);
     
     if ('X' == grid[0] && 'X' == grid[1] && 'X' == grid[2]) {
         winner = true;
@@ -281,8 +275,8 @@ app.post('/ttt', urlencodedParser, function (req, res) {
         grid: grid,
         winner: winner
     }
+    console.log("AFTER: " + grid);
     //GAME START
-    console.log(grid);
     if(req.session.game_id == undefined) {
         var today = new Date();
         var dd = String(today.getDate()).padStart(2, '0');
@@ -291,7 +285,6 @@ app.post('/ttt', urlencodedParser, function (req, res) {
         today = mm + '/' + dd + '/' + yyyy;
         db.addGame(user, today, grid, winner, (err, result) => {
             if (err) {
-                console.log(err);
                 res.status(200).send({
                     status: "ERROR"
                 });
@@ -303,7 +296,6 @@ app.post('/ttt', urlencodedParser, function (req, res) {
     } else {
         db.updateGame(req.session.game_id, grid, winner, (err, result) => {
             if(err) {
-                console.log(err);
                 res.status(200).send({
                     status: "ERROR"
                 });
