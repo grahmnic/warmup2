@@ -149,7 +149,7 @@ app.post('/ttt', urlencodedParser, function (req, res) {
 
  app.post('/logout', function(req, res) {
     if (req.session.loggedin) {
-        res.clearCookie('user_sid');
+        res.clearCookie('user_sid');    
         res.status(200).send({
             status: "OK"
         });   
