@@ -41,13 +41,9 @@ module.exports = {
                 callback(null, 0);//username not found
             }
             else {
-<<<<<<< HEAD
-                if (password === row.password) {
-=======
                 console.log(row);
                 if (password === row.password && row.verified === 1) {
                     console.log('1');
->>>>>>> 65223f983bfc2c20f79830a1e7626fd5019591e9
                     callback(null, 1);
                 }
                 else {
