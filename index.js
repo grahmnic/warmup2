@@ -11,24 +11,56 @@ app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+let transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: 'cloud356ttt@gmail.com',
+        password: 'cse356-cloud',
+    }
+});
+
+let mailOptions = {
+    from: 'cloud356ttt@gmail.com',
+    to: 'ralph.huang@stonybrook.edu',
+    subject: 'Verify your email.',
+    text: 'validation key: '
+};
+
+transporter.sendMail(mailOptions)
+    .then(function(response) {
+        console.log('Email sent');
+    }).catch(function(error) {
+        console.log('Error ', error);
+    });
+
 //SIGN UP
 app.post('/signup', (req, res) => {
     var username = req.body.username;
     var password = req.body.password;
     var email = req.body.email;
 
-    let transporter = nodemailer.createTransport({
-        service: 'gmail',
-        auth: {
-            user: '',
-            password: ''
-        }
-    });
+    // let transporter = nodemailer.createTransport({
+    //     service: 'gmail',
+    //     auth: {
+    //         user: 'cloud356ttt@gmail.com',
+    //         password: 'cse356-cloud',
+    //     }
+    // });
 
-    let mailOptions = {
-        from: 'cloud356ttt@gmail.com',
-        to: email,
-    };
+    // let mailOptions = {
+    //     from: 'cloud356ttt@gmail.com',
+    //     to: 'ralph.huang@stonybrook.edu',
+    //     subject: 'Verify your email.',
+    //     text: 'validation key: '
+    // };
+
+    // transporter.sendMail(mailOptions, function(err, data) {
+    //     if (err) {
+    //         console.log('Error');
+    //     } else {
+    //         console.log('EMAIL SEND');
+    //     }
+    // });
 
     db.addUser(username, password, email, (err, result) => {
         if (err) {
