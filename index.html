@@ -75,6 +75,26 @@
                 </form>
             </div>
 
+            <div class="notification" style="max-width: 600px">
+                <h2 style="border-bottom: 1px dotted grey; margin-bottom: 10px">
+                    <strong>Verify</strong>
+                </h2>
+
+                <form action="/ttt/verify" method="POST">
+                    <div class="field">
+                        <span style="font-size: 13px;">Email</span>
+                        <p class="control">
+                            <input name="email" class="input is-small" type="text" placeholder="Email">
+                        </p>
+                        <span style="font-size: 13px;">Key</span>
+                        <p class="control">
+                            <input name="key" class="input is-small" type="text" placeholder="Key">
+                        </p>
+                    </div>
+                    <button type="submit" class="button is-primary">Submit</button>
+                </form>
+            </div>
+
         </div>
         <br/>
     </div>

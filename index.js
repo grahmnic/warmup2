@@ -62,23 +62,18 @@ app.post('/ttt', urlencodedParser, function (req, res) {
     var username = req.body.username;
     var password = req.body.password;
     var email = req.body.email;
-    
-    db.addUser(username, password, email, (err, result) => {
+    var key = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+
+    db.addUser(username, password, email, key, (err, result) => {
         if (err) {
             console.log("Error: " + err);
             res.status(400).send({
                 success: false
             });
         }
-        if (result != undefined && result.length != 0) {
-            res.status(200).send({
-                result: result
-            });
-        }
         else {
-            res.status(404).send({
-                success: false,
-                message: 'Something went wrong with addUser.'
+            res.status(200).send({
+                status: "OK"
             });
         }
     });
@@ -88,6 +83,24 @@ app.post('/ttt', urlencodedParser, function (req, res) {
     var email = req.body.email;
     var key = req.body.key;
 
+    db.verify(email, key, (err, result) => {
+        if (err) {
+            console.log("Error: " + err);
+            res.status(400).send({
+                success: false
+            });
+        }
+        else if (result == 1) {
+            res.status(200).send({
+                status: "OK"
+            });
+        }
+        else {
+            res.status(200).send({
+                status: "ERROR"
+            })
+        }
+    });
  })
 
  app.post('/ttt/login', function(req, res) {
