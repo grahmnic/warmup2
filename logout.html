@@ -32,12 +32,36 @@
                     <button type="submit" class="button is-primary">Submit</button>
                 </form>
             </div>
-
+            
             <div class="notification" style="max-width: 600px">
                 <h2 style="border-bottom: 1px dotted grey; margin-bottom: 10px">
-                    <strong>Logout</strong>
+                    <strong>Search by Game ID</strong>
                 </h2>
 
+                <form action="/getgame" method="POST">
+                    <div class="field">
+                        <span style="font-size: 13px;">Enter Game ID</span>
+                        <p class="control">
+                            <input name="id" class="input is-small" type="text" placeholder="Game Id">
+                        </p>
+                    </div>
+                    <button type="submit" class="button is-primary">Submit</button>
+                </form>
+            </div>
+
+            <div class="notification" style="max-width: 600px">
+                <form action="/listgames" method="POST">
+                    <button type="submit" class="button is-primary">Game History</button>
+                </form>
+            </div>    
+
+            <div class="notification" style="max-width: 600px">
+                <form action="/getscore" method="POST">
+                    <button type="submit" class="button is-primary">Get Score</button>
+                </form>
+            </div>
+
+            <div class="notification" style="max-width: 600px">
                 <form action="/logout" method="POST">
                     <button type="submit" class="button is-primary">Logout</button>
                 </form>
