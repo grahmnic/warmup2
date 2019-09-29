@@ -58,35 +58,57 @@ app.post('/ttt', urlencodedParser, function (req, res) {
     res.end();
 })
 
- app.post('/ttt/adduser', function(req, res) {
+ app.post('/ttt/adduser', urlencodedParser, function(req, res) {
     var username = req.body.username;
     var password = req.body.password;
     var email = req.body.email;
-
+    
     db.addUser(username, password, email, (err, result) => {
         if (err) {
+            console.log("Error: " + err);
             res.status(400).send({
                 success: false
             });
         }
         if (result != undefined && result.length != 0) {
             res.status(200).send({
-                MenuSection: result
+                result: result
             });
         }
         else {
             res.status(404).send({
                 success: false,
-                message: ''
+                message: 'Something went wrong with addUser.'
             });
         }
     });
  })
 
- app.verify('/ttt/verify', function(req, res) {
+ app.post('/ttt/verify', function(req, res) {
     var email = req.body.email;
     var key = req.body.key;
 
+ })
+
+ app.post('/ttt/login', function(req, res) {
+     var username = req.body.username;
+     var password = req.body.password;
+
+ })
+
+ app.post('/ttt/logout', function(req, res) {
+
+ })
+
+ app.post('/ttt/listgames', function(req, res) {
+
+ })
+
+ app.post('/ttt/getgame', function(req, res) {
+
+ }) 
+
+ app.post('/ttt/getscore', function(req, res) {
 
  })
 
