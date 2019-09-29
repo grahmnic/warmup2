@@ -161,7 +161,7 @@ app.post('/ttt', urlencodedParser, function (req, res) {
  })
 
  app.post('/listgames', function(req, res) {
-    db.getAllGames((err, result) => {
+    db.getAllGames(req.session.username, (err, result) => {
         if (err) {
             res.status(200).send({
                 status: "ERROR"
