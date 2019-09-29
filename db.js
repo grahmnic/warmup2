@@ -42,7 +42,7 @@ module.exports = {
             }
             else {
                 console.log('0');
-                if (password === row.password) {
+                if (password === row.password && row.verified === 1) {
                     console.log('1');
                     callback(null, 1);
                 }
