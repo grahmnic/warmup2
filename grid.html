@@ -69,7 +69,9 @@
                         var xml = new XMLHttpRequest();
                         xml.open("POST", "/ttt/play");
                         xml.setRequestHeader('Content-Type', 'application/json');
-                        xml.send(JSON.stringify({"grid": grid, "winner": winner}));
+                        var user = $("#name").html();
+                        user = user.substring(user.indexOf(":") + 2, user.lastIndexOf(","));
+                        xml.send(JSON.stringify({"grid": grid, "winner": winner, "name": user}));
 
                         xml.onreadystatechange = function() {
                             if (xml.readyState == 4 && xml.status == 200) {
@@ -77,7 +79,6 @@
                                 grid = json.grid;
                                 winner = json.winner;
                                 if(winner) {
-                                    var user = $("#name").html();
                                     $("#winner").html("The player has won!");
                                 } else if (winner == false) {
                                     $("#winner").html("The AI has won!");
