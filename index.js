@@ -277,6 +277,7 @@ app.post('/ttt', urlencodedParser, function (req, res) {
         grid: grid,
         winner: winner
     }
+    req.session.grid = grid;
     console.log("AFTER: " + grid);
     //GAME START
     if(req.session.game_id === undefined) {
@@ -292,7 +293,6 @@ app.post('/ttt', urlencodedParser, function (req, res) {
                 });
             } else {
                 req.session.game_id = result.id;
-                req.session.grid = grid;
                 res.send(response);
             }
         });
@@ -303,7 +303,6 @@ app.post('/ttt', urlencodedParser, function (req, res) {
                     status: "ERROR"
                 });
             } else {
-                req.session.grid = grid;
                 res.send(response);
             }
         })
