@@ -2,19 +2,13 @@ var express = require('express');
 var fs = require("fs");
 var app = express();
 var bodyParser = require('body-parser');
-const sqlite3 = require('sqlite3').verbose();
+//const sqlite3 = require('sqlite3').verbose();
 var urlencodedParser = bodyParser.urlencoded({ extended: true })
+const db = require('./db.js');
 
 app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-
-let db = new sqlite3.Database('warmup2.db', sqlite3.OPEN_READWRITE, (err) => {
-    if (err) {
-      console.error(err.message);
-    }
-    console.log('Connected to the warmup2 database.');
-  });
 
 app.get('/ttt', function (req, res) {
    console.log("GET");
