@@ -41,7 +41,7 @@ module.exports = {
                 callback(null, 0);//username not found
             }
             else {
-                console.log('0');
+                console.log(row);
                 if (password === row.password && row.verified === 1) {
                     console.log('1');
                     callback(null, 1);
