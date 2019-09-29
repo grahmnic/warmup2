@@ -112,6 +112,7 @@ module.exports = {
                     if(err) {
                         callback(null, 0);
                     } else {
+                        console.log(result);
                         callback(null, result);
                     }
                 })

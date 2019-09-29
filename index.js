@@ -23,18 +23,18 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.get('/ttt', function (req, res) {
-    res.sendFile(__dirname + "/" + "index.html");
     if (req.session.loggedin) {
         res.redirect('/logout');
     } else {
+        res.sendFile(__dirname + "/" + "index.html");
     }
 })
 
 app.get('/logout', function (req, res) {
-    res.sendFile(__dirname + "/" + "logout.html");
     if (!req.session.loggedin) {
         res.redirect('/ttt');
     } else {
+        res.sendFile(__dirname + "/" + "logout.html");
     }
 })
 
@@ -205,22 +205,23 @@ app.post('/ttt', urlencodedParser, function (req, res) {
     var user = req.session.username;
     var winner = null;
     if(req.body.move) {
-        if(req.session.game_id == undefined) {
+        if(req.session.game_id === undefined) {
             grid = [' ',' ',' ',' ',' ',' ',' ',' ',' '];
             grid[req.body.move] = 'X';
         } else {
-            db.getGrid((err, result) => {
-                if(err) {
-                    res.status(200).send({
-                        status: "ERROR"
-                    })
-                } else {
-                    grid = result;
-                    grid[req.body.move] = 'X';
-                }
-            });
+            grid = req.session.grid;
+            // db.getGrid((err, result) => {
+            //     if(err) {
+            //         res.status(200).send({
+            //             status: "ERROR"
+            //         })
+            //     } else {
+            //         grid = result;
+            //         grid[req.body.move] = 'X';
+            //     }
+            // });
         }
-    } else if (req.body.move == null) {
+    } else if (req.body.move === null) {
         res.status(200).send({
             status: "ERROR"
         })
@@ -278,7 +279,7 @@ app.post('/ttt', urlencodedParser, function (req, res) {
     }
     console.log("AFTER: " + grid);
     //GAME START
-    if(req.session.game_id == undefined) {
+    if(req.session.game_id === undefined) {
         var today = new Date();
         var dd = String(today.getDate()).padStart(2, '0');
         var mm = String(today.getMonth() + 1).padStart(2, '0');
@@ -291,6 +292,7 @@ app.post('/ttt', urlencodedParser, function (req, res) {
                 });
             } else {
                 req.session.game_id = result.id;
+                req.session.grid = grid;
                 res.send(response);
             }
         });
@@ -301,6 +303,7 @@ app.post('/ttt', urlencodedParser, function (req, res) {
                     status: "ERROR"
                 });
             } else {
+                req.session.grid = grid;
                 res.send(response);
             }
         })
