@@ -10,20 +10,23 @@ const db = require('./db.js');
 const nodemailer = require('nodemailer');
 
 app.use(session({
-	secret: 'secret',
-	resave: true,
-	saveUninitialized: true
+    key: 'user_sid',
+    secret: 'secret',
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+        expires: 600000
+    }
 }));
 app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.get('/ttt', function (req, res) {
-    console.log("GET");
     res.sendFile(__dirname + "/" + "index.html");
     if (req.session.loggedin) {
         console.log('Logged in');
-        res.sendFile(__dirname + "/" + "logout.html");
+        res.redirect('/logout');
     } else {
         console.log('Please login.');
     }
@@ -31,6 +34,12 @@ app.get('/ttt', function (req, res) {
 
 app.get('/logout', function (req, res) {
     res.sendFile(__dirname + "/" + "logout.html");
+    if (!req.session.loggedin) {
+        console.log('LOGGED OUT')
+        res.redirect('/ttt');
+    } else {
+        console.log('Error logging out');
+    }
 })
 
 app.post('/ttt', urlencodedParser, function (req, res) {
@@ -131,7 +140,6 @@ app.post('/ttt', urlencodedParser, function (req, res) {
             });    
         }
         else {
-            console.log("e");
             res.status(200).send({
                 status: "ERROR"
             })
@@ -140,7 +148,16 @@ app.post('/ttt', urlencodedParser, function (req, res) {
  })
 
  app.post('/logout', function(req, res) {
-    
+    if (req.session.loggedin) {
+        res.clearCookie('user_sid');    
+        res.status(200).send({
+            status: "OK"
+        });   
+    } else {
+        res.status(200).send({
+            status: "ERROR"
+        });  
+    }
  })
 
  app.post('/listgames', function(req, res) {
