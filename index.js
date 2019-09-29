@@ -101,23 +101,9 @@ app.post('/ttt', urlencodedParser, function (req, res) {
             });
         }
         else if (result == 1) {
-            db.verifyUser(email, (err, result) => {
-                if (err) {
-                    res.status(400).send({
-                        success: false
-                    });
-                }
-                else if (result == 1) {
-                    res.status(200).send({
-                        status: "OK"
-                    });
-                }
-                else {
-                    res.status(200).send({
-                        status: "ERROR"
-                    })
-                }
-            })
+            res.status(200).send({
+                status: "OK"
+            });
         }
         else {
             res.status(200).send({
@@ -189,7 +175,18 @@ app.post('/ttt', urlencodedParser, function (req, res) {
  }) 
 
  app.post('/getscore', function(req, res) {
-
+    db.getScore((err, result) => {
+        if(err) {
+            res.status(200).send({
+                status: "ERROR"
+            })
+        } else {
+            res.status(200).send({
+                status: "OK",
+                human: result
+            })
+        }
+    })
  });
 
  app.post('/ttt/play', function(req, res) {

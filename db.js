@@ -18,39 +18,18 @@ module.exports = {
                 callback(err);
             }
             else {
-                console.log(rows);
                 callback(null, rows);
             }
         });
     },
     verify: function (email, key, callback) {
-        const getKeyQuery = 'SELECT key FROM User WHERE email=?';
-        db.get(getKeyQuery, [email], (err, row) => {
-            if (err) {
-                callback(err);
-            }
-            else {
-                console.log(row);
-                if (key === 'abracadabra') {
-                    callback(null, 1);
-                }
-                if (key === row.key) {
-                    callback(null, 1);
-                }
-                else {
-                    callback(null, 0);
-                }
-            }
-        });
-    },
-    verifyUser: function(email, callback) {
-        const verifyUserQuery = 'UPDATE User SET verified=1 WHERE email=?';
-        db.run(verifyUserQuery, [email], (err, row) => {
+        console.log(email + key);
+        const getKeyQuery = 'UPDATE User SET verified=1 WHERE email=? AND key=?';
+        db.run(getKeyQuery, [email, key], (err, row) => {
             if (err) {
                 callback(null, 0);
             }
             else {
-                console.log(row);
                 callback(null, 1);
             }
         });
@@ -119,5 +98,8 @@ module.exports = {
                 callback(null, row);
             }
         });
+    },
+    getScore: function(callback) {
+        const getScoreQuery = ''
     }
 };
