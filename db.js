@@ -43,7 +43,7 @@ module.exports = {
             }
         });
     },
-    verifyUser: function(email) {
+    verifyUser: function(email, callback) {
         const verifyUserQuery = 'UPDATE User SET verified=1 WHERE email=?';
         db.run(verifyUserQuery, [email], (err, row) => {
             if(err) {
