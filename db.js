@@ -72,12 +72,13 @@ module.exports = {
         });
     },
     getGamesById: function (id, callback) {
-        const getGamesQuery = 'SELECT * FROM Games WHERE game_id = ?';
-        db.run(getGamesQuery, [id], (err, rows) => {
+        const getGamesQuery = 'SELECT * FROM Games WHERE game_id=?';
+        db.get(getGamesQuery, [id], (err, rows) => {
             if (err) {
                 callback(err);
             } else {
                 var res = {};
+                console.log(id);
                 console.log("GET GAMES RESULT: " + rows);
                 res.grid = rows.grid.split(",");
                 for(var i = 0; i < res.grid.length; i++) {
