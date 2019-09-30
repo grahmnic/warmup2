@@ -204,7 +204,7 @@ app.post('/ttt', urlencodedParser, function (req, res) {
      console.log(req.session.grid);
     var grid = req.body.grid;
     var user = req.session.username;
-    var winner = req.session.winner;
+    var winner = null;
     if(req.body.move) {
         if(req.session.game_id === undefined) {
             grid = [' ',' ',' ',' ',' ',' ',' ',' ',' '];
