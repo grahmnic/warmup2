@@ -79,7 +79,7 @@ module.exports = {
             } else {
                 var res = {};
                 console.log(id);
-                console.log("GET GAMES RESULT: " + rows);
+                console.log("GET GAMES RESULT: " + rows.grid);
                 res.grid = rows.grid.split(",");
                 for(var i = 0; i < res.grid.length; i++) {
                     if(res.grid[i] == null) {

@@ -177,7 +177,8 @@ app.post('/ttt', urlencodedParser, function (req, res) {
         } else {
             res.status(200).send({
                 status: "OK",
-                grid: result
+                grid: result.grid,
+                winner: result.winner
             })
         }
     })
