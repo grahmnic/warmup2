@@ -185,7 +185,7 @@ app.post('/ttt', urlencodedParser, function (req, res) {
  }) 
 
  app.post('/getscore', function(req, res) {
-    db.getScore((err, result) => {
+    db.getScore(req.session.username, (err, result) => {
         if(err) {
             res.status(200).send({
                 status: "ERROR"
