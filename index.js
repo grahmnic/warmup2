@@ -223,103 +223,106 @@ app.post('/ttt', urlencodedParser, function (req, res) {
             //     }
             // });
         }
-    } else if (req.body.move === null) {
+    }
+    
+    if (req.body.move === null) {
         var response = {
             grid: req.session.grid,
             winner: req.session.winner
         }
         res.send(response);
-    }
-    
-    if ('X' == grid[0] && 'X' == grid[1] && 'X' == grid[2]) {
-        winner = 'X';
-    } else if ('X' == grid[3] && 'X' == grid[4] && 'X' == grid[5]) {
-        winner = 'X';
-    } else if ('X' == grid[6] && 'X' == grid[7] && 'X' == grid[8]) {
-        winner = 'X';
-    } else if ('X' == grid[0] && 'X' == grid[3] && 'X' == grid[6]) {
-        winner = 'X';
-    } else if ('X' == grid[1] && 'X' == grid[4] && 'X' == grid[7]) {
-        winner = 'X';
-    } else if ('X' == grid[2] && 'X' == grid[5] && 'X' == grid[8]) {
-        winner = 'X';
-    } else if ('X' == grid[0] && 'X' == grid[4] && 'X' == grid[8]) {
-        winner = 'X';
-    } else if ('X' == grid[2] && 'X' == grid[4] && 'X' == grid[6]) {
-        winner = 'X';
     } else {
-        // DO RANDOM MOVE
-        if(grid.filter(x => x == ' ').length != 0) {
-            var dict = [];
-            for(var i = 0; i < grid.length; i++) {
-                dict.push({index: i, val: grid[i]});
-            }
-            dict = dict.filter(x => x.val == ' ');
-            grid[dict[Math.floor(Math.random() * dict.length)].index] = 'O';
-        }
-
-        if ('O' == grid[0] && 'O' == grid[1] && 'O' == grid[2]) {
-            winner = 'O';
-        } else if ('O' == grid[3] && 'O' == grid[4] && 'O' == grid[5]) {
-            winner = 'O';
-        } else if ('O' == grid[6] && 'O' == grid[7] && 'O' == grid[8]) {
-            winner = 'O';
-        } else if ('O' == grid[0] && 'O' == grid[3] && 'O' == grid[6]) {
-            winner = 'O';
-        } else if ('O' == grid[1] && 'O' == grid[4] && 'O' == grid[7]) {
-            winner = 'O';
-        } else if ('O' == grid[2] && 'O' == grid[5] && 'O' == grid[8]) {
-            winner = 'O';
-        } else if ('O' == grid[0] && 'O' == grid[4] && 'O' == grid[8]) {
-            winner = 'O';
-        } else if ('O' == grid[2] && 'O' == grid[4] && 'O' == grid[6]) {
-            winner = 'O';
-        }
-    }
-    var response = {
-        grid: grid,
-        winner: winner
-    }
-    req.session.grid = grid;
-    req.session.winner = winner;
-    //GAME START
-    if(req.session.game_id === undefined) {
-        console.log("ADDING NEW GAME");
-        var today = new Date();
-        var dd = String(today.getDate()).padStart(2, '0');
-        var mm = String(today.getMonth() + 1).padStart(2, '0');
-        var yyyy = today.getFullYear();
-        today = mm + '/' + dd + '/' + yyyy;
-        db.addGame(user, today, grid, winner, (err, result) => {
-            if (err) {
-                res.status(200).send({
-                    status: "ERROR"
-                });
-            } else {
-                req.session.game_id = result.id;
-                res.send(response);
-            }
-        });
-    } else {
-        console.log("UPDATING GAME");
-        console.log(grid);
-        db.updateGame(req.session.game_id, grid, winner, (err, result) => {
-            if(err) {
-                res.status(200).send({
-                    status: "ERROR"
-                });
-            } else {
-                if(winner === 'X' || winner === 'O' || grid.filter(x => x === " ").length == 0) {
-                    // RESET GAME
-                    console.log("RESETTING GAME");
-                    req.session.game_id = undefined
-                    req.session.grid = null;
-                    req.session.winner = null;
+        
+        if ('X' == grid[0] && 'X' == grid[1] && 'X' == grid[2]) {
+            winner = 'X';
+        } else if ('X' == grid[3] && 'X' == grid[4] && 'X' == grid[5]) {
+            winner = 'X';
+        } else if ('X' == grid[6] && 'X' == grid[7] && 'X' == grid[8]) {
+            winner = 'X';
+        } else if ('X' == grid[0] && 'X' == grid[3] && 'X' == grid[6]) {
+            winner = 'X';
+        } else if ('X' == grid[1] && 'X' == grid[4] && 'X' == grid[7]) {
+            winner = 'X';
+        } else if ('X' == grid[2] && 'X' == grid[5] && 'X' == grid[8]) {
+            winner = 'X';
+        } else if ('X' == grid[0] && 'X' == grid[4] && 'X' == grid[8]) {
+            winner = 'X';
+        } else if ('X' == grid[2] && 'X' == grid[4] && 'X' == grid[6]) {
+            winner = 'X';
+        } else {
+            // DO RANDOM MOVE
+            if(grid.filter(x => x == ' ').length != 0) {
+                var dict = [];
+                for(var i = 0; i < grid.length; i++) {
+                    dict.push({index: i, val: grid[i]});
                 }
-                console.log(response);
-                res.send(response);
+                dict = dict.filter(x => x.val == ' ');
+                grid[dict[Math.floor(Math.random() * dict.length)].index] = 'O';
             }
-        })
+
+            if ('O' == grid[0] && 'O' == grid[1] && 'O' == grid[2]) {
+                winner = 'O';
+            } else if ('O' == grid[3] && 'O' == grid[4] && 'O' == grid[5]) {
+                winner = 'O';
+            } else if ('O' == grid[6] && 'O' == grid[7] && 'O' == grid[8]) {
+                winner = 'O';
+            } else if ('O' == grid[0] && 'O' == grid[3] && 'O' == grid[6]) {
+                winner = 'O';
+            } else if ('O' == grid[1] && 'O' == grid[4] && 'O' == grid[7]) {
+                winner = 'O';
+            } else if ('O' == grid[2] && 'O' == grid[5] && 'O' == grid[8]) {
+                winner = 'O';
+            } else if ('O' == grid[0] && 'O' == grid[4] && 'O' == grid[8]) {
+                winner = 'O';
+            } else if ('O' == grid[2] && 'O' == grid[4] && 'O' == grid[6]) {
+                winner = 'O';
+            }
+        }
+        var response = {
+            grid: grid,
+            winner: winner
+        }
+        req.session.grid = grid;
+        req.session.winner = winner;
+        //GAME START
+        if(req.session.game_id === undefined) {
+            console.log("ADDING NEW GAME");
+            var today = new Date();
+            var dd = String(today.getDate()).padStart(2, '0');
+            var mm = String(today.getMonth() + 1).padStart(2, '0');
+            var yyyy = today.getFullYear();
+            today = mm + '/' + dd + '/' + yyyy;
+            db.addGame(user, today, grid, winner, (err, result) => {
+                if (err) {
+                    res.status(200).send({
+                        status: "ERROR"
+                    });
+                } else {
+                    req.session.game_id = result.id;
+                    res.send(response);
+                }
+            });
+        } else {
+            console.log("UPDATING GAME");
+            console.log(grid);
+            db.updateGame(req.session.game_id, grid, winner, (err, result) => {
+                if(err) {
+                    res.status(200).send({
+                        status: "ERROR"
+                    });
+                } else {
+                    if(winner === 'X' || winner === 'O' || grid.filter(x => x === " ").length == 0) {
+                        // RESET GAME
+                        console.log("RESETTING GAME");
+                        req.session.game_id = undefined
+                        req.session.grid = null;
+                        req.session.winner = null;
+                    }
+                    console.log(response);
+                    res.send(response);
+                }
+            })
+        }
     }
 })
 
