@@ -148,7 +148,24 @@ module.exports = {
             }
         });
     },
-    getScore: function(callback) {
-        const getScoreQuery = ''
+    getScore: function(username, callback) {
+        const getScoreQuery = 'SELECT winner FROM Games WHERE username=?';
+        db.get(getScoreQuery, [username], (err, result) => {
+            if(err) {
+                callback(err);
+            } else {
+                var resp = {human: 0, wopr: 0, tie: 0};
+                for(var i = 0; i < result.length; i++) {
+                    if(result[i] == 'X') {
+                        resp.human++;
+                    } else if (result[i] == 'O') {
+                        resp.wopr++;
+                    } else {
+                        resp.tie++;
+                    }
+                }
+                callback(null, resp);
+            }
+        });
     }
 };

@@ -193,7 +193,9 @@ app.post('/ttt', urlencodedParser, function (req, res) {
         } else {
             res.status(200).send({
                 status: "OK",
-                human: result
+                human: result.human,
+                wopr: result.wopr,
+                tie: result.tie
             })
         }
     })
