@@ -232,21 +232,21 @@ app.post('/ttt', urlencodedParser, function (req, res) {
     }
     
     if ('X' == grid[0] && 'X' == grid[1] && 'X' == grid[2]) {
-        winner = true;
+        winner = 'X';
     } else if ('X' == grid[3] && 'X' == grid[4] && 'X' == grid[5]) {
-        winner = true;
+        winner = 'X';
     } else if ('X' == grid[6] && 'X' == grid[7] && 'X' == grid[8]) {
-        winner = true;
+        winner = 'X';
     } else if ('X' == grid[0] && 'X' == grid[3] && 'X' == grid[6]) {
-        winner = true;
+        winner = 'X';
     } else if ('X' == grid[1] && 'X' == grid[4] && 'X' == grid[7]) {
-        winner = true;
+        winner = 'X';
     } else if ('X' == grid[2] && 'X' == grid[5] && 'X' == grid[8]) {
-        winner = true;
+        winner = 'X';
     } else if ('X' == grid[0] && 'X' == grid[4] && 'X' == grid[8]) {
-        winner = true;
+        winner = 'X';
     } else if ('X' == grid[2] && 'X' == grid[4] && 'X' == grid[6]) {
-        winner = true;
+        winner = 'X';
     } else {
         // DO RANDOM MOVE
         if(grid.filter(x => x == ' ').length != 0) {
@@ -259,21 +259,21 @@ app.post('/ttt', urlencodedParser, function (req, res) {
         }
 
         if ('O' == grid[0] && 'O' == grid[1] && 'O' == grid[2]) {
-            winner = false;
+            winner = 'O';
         } else if ('O' == grid[3] && 'O' == grid[4] && 'O' == grid[5]) {
-            winner = false;
+            winner = 'O';
         } else if ('O' == grid[6] && 'O' == grid[7] && 'O' == grid[8]) {
-            winner = false;
+            winner = 'O';
         } else if ('O' == grid[0] && 'O' == grid[3] && 'O' == grid[6]) {
-            winner = false;
+            winner = 'O';
         } else if ('O' == grid[1] && 'O' == grid[4] && 'O' == grid[7]) {
-            winner = false;
+            winner = 'O';
         } else if ('O' == grid[2] && 'O' == grid[5] && 'O' == grid[8]) {
-            winner = false;
+            winner = 'O';
         } else if ('O' == grid[0] && 'O' == grid[4] && 'O' == grid[8]) {
-            winner = false;
+            winner = 'O';
         } else if ('O' == grid[2] && 'O' == grid[4] && 'O' == grid[6]) {
-            winner = false;
+            winner = 'O';
         }
     }
     var response = {
@@ -309,7 +309,7 @@ app.post('/ttt', urlencodedParser, function (req, res) {
                     status: "ERROR"
                 });
             } else {
-                if(winner === true || winner === false || grid.filter(x => x === " ").length == 0) {
+                if(winner === 'X' || winner === 'O' || grid.filter(x => x === " ").length == 0) {
                     // RESET GAME
                     console.log("RESETTING GAME");
                     req.session.game_id = undefined
