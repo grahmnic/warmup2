@@ -216,16 +216,6 @@ app.post('/ttt', urlencodedParser, function (req, res) {
         } else {
             grid = req.session.grid;
             grid[req.body.move] = 'X';
-            // db.getGrid((err, result) => {
-            //     if(err) {
-            //         res.status(200).send({
-            //             status: "ERROR"
-            //         })
-            //     } else {
-            //         grid = result;
-            //         grid[req.body.move] = 'X';
-            //     }
-            // });
         }
     }
     
